@@ -4,7 +4,7 @@
             <LogoSVG class="h-[50px] flex-1" />
         </nav>
         <section
-            class="w-[90vw] min-h-screen lg:container mx-auto my-0 -mt-12 grid items-center grid-cols-1 lg:grid-cols-2 gap-12">
+            class="w-[90vw] min-h-[calc(100vh-80px)] lg:container mx-auto my-0 -mt-12 grid items-center grid-cols-1 lg:grid-cols-2 gap-12">
             <div class="">
                 <h1 class="font-bold text-5xl mb-5 capitalize ">Job <span class="text-cyan-500">Tracking</span> App</h1>
                 <p class="text-gray-600 mb-6">
@@ -27,6 +27,3 @@ import LandingImg from '@/assets/images/main.svg';
 import BaseButtonLink from '@/components/ui/BaseButtonLink.vue';
 
 </script>
-
-<style scoped>
-</style>
