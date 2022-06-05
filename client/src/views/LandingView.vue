@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h3>Landing Page</h3>
+        <h3 class="bg-red-500">Landing Page</h3>
     </div>
 </template>
 
