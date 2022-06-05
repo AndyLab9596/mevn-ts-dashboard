@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h3>Home View</h3>
-  </div>
+    <div>
+        <h3 class="bg-red-500">Landing Page</h3>
+    </div>
 </template>
 
 <script setup lang="ts">

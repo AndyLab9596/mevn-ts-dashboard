@@ -15,7 +15,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/api/v1', (req: Request, res: Response) => {
     res.status(200).json({ msg: 'Connect Successfully' })
 })
 
