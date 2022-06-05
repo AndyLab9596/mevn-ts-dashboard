@@ -14,22 +14,36 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/landing',
     name: 'landing',
-    component: LandingView
+    component: LandingView,
+    meta: {
+      title: 'Landing'
+    }
   },
   {
     path: '/auth',
     name: 'auth',
-    component: AuthView
+    component: AuthView,
+    meta: {
+      title: 'Register/Login'
+    }
   },
   {
     path: '/:notFound(.*)',
-    component: NotFound
+    component: NotFound,
+    meta: {
+      title: 'Not Found'
+    }
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes
+})
+
+router.beforeEach((to, _, next) => {
+  document.title = `${to.meta.title} | Jobify`;
+  next()
 })
 
 export default router
