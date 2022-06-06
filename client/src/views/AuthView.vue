@@ -38,12 +38,19 @@ const toggleMode = () => {
 }
 
 const handleSubmit = () => {
-    const formValue = {
-        name: nameInput.value,
-        email: emailInput.value,
-        password: passwordInput.value,
+    let formValue;
+    if (isRegisterMode.value) {
+        formValue = {
+            name: nameInput.value,
+            email: emailInput.value,
+            password: passwordInput.value,
+        }
+    } else {
+        formValue = {
+            email: emailInput.value,
+            password: passwordInput.value,
+        }
     }
-
     console.log(formValue);
 }
 
