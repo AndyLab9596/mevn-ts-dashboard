@@ -8,3 +8,4 @@ class NotFoundError extends CustomAPIError {
         this.status = StatusCodes.NOT_FOUND
     }
 }
+export default NotFoundError

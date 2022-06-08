@@ -7,6 +7,9 @@ import connectDatabase from './database/connectDatabase';
 import notFoundMiddleware from './middleware/not-found';
 import errorHandlerMiddleware from './middleware/error-handler';
 
+// router import
+import authRouter from './routes/authRoute';
+
 dotenv.config();
 const app: Application = express();
 
@@ -20,6 +23,8 @@ app.use(express.json());
 app.get('/api/v1', (req: Request, res: Response) => {
     res.status(200).json({ msg: 'Connect Successfully' })
 })
+
+app.use('/api/v1/auth', authRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
