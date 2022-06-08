@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BadRequestError } from '../errors';
+import { BadRequestError, NotFoundError, UnauthenticatedError } from '../errors';
 import User from '../models/User';
 
 const register = async (req: Request, res: Response) => {
@@ -28,7 +28,18 @@ const register = async (req: Request, res: Response) => {
 };
 
 const login = async (req: Request, res: Response) => {
-    res.send('login')
+    const { email, password } = req.body;
+    if (!email || !password) throw new BadRequestError('Please provide all values !');
+
+    // check if user is already existed
+    const user = await User.findOne({ email }).select('+password');
+    if (!user) throw new UnauthenticatedError('Invalid credential');
+    // comapare password
+    const isPasswordCorrect = await user.comparePassword(password);
+    if (!isPasswordCorrect) throw new BadRequestError('Invalid credential');
+    const token = user.createJWT();
+
+    res.status(StatusCodes.OK).json({ user, token, location: user.location })
 };
 
 const updateUser = async (req: Request, res: Response) => {
