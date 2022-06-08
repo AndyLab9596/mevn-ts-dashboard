@@ -18,9 +18,3 @@ interface IBaseButtonLink {
 
 defineProps<IBaseButtonLink>();
 </script>
-
-<style>
-.router-link {
-    display: inline-block;
-}
-</style>
