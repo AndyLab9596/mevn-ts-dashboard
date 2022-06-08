@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import validator from 'validator';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -9,6 +9,9 @@ interface IUserSchema {
     password: string;
     lastName: string;
     location: string;
+    _id: Types.ObjectId;
+    createJWT: () => string;
+    comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
 
 const UserSchema = new mongoose.Schema<IUserSchema>({
@@ -55,11 +58,11 @@ UserSchema.pre('save', async function () {
 });
 
 UserSchema.methods.createJWT = function () {
-    return jwt.sign({userId: this._id}, process.env.jwtSecret as string);
+    return jwt.sign({ userId: this._id }, process.env.jwtSecret as string);
 };
 
-UserSchema.methods.comparePassword = function (candidatePassword: typeof this.password) {
-    return bcrypt.compare(candidatePassword, this.password);
+UserSchema.methods.comparePassword = async function (candidatePassword: typeof this.password) {
+    return await bcrypt.compare(candidatePassword, this.password);
 }
 
 export default mongoose.model('User', UserSchema);
