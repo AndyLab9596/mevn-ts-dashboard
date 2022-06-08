@@ -42,7 +42,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, _, next) => {
-  document.title = `${to.meta.title} | Jobify`;
+  document.title = to.meta.title ? `${to.meta.title} | Jobify` : 'Jobify';
   next()
 })
 
