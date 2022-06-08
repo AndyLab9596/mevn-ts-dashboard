@@ -24,15 +24,15 @@
 </template>
 
 <script setup lang="ts">
-import LogoSVG from '@/assets/images/logo.svg'
-import BaseInputFormField from '@/components/ui/BaseInputFormField.vue';
-import BaseButton from '@/components/ui/BaseButton.vue';
-import { ref } from 'vue';
+import LogoSVG from '@/assets/images/logo.svg';
 import BaseAlert from '@/components/ui/BaseAlert.vue';
+import BaseButton from '@/components/ui/BaseButton.vue';
+import BaseInputFormField from '@/components/ui/BaseInputFormField.vue';
 import { useGlobalStore } from '@/stores/globalStore';
+import { ref } from 'vue';
 
 const globalStore = useGlobalStore();
-const { displayAlert } = globalStore;
+const { displayAlert, authAction } = globalStore;
 
 const nameInput = ref<string>('');
 const emailInput = ref<string>('');
@@ -43,7 +43,13 @@ const toggleMode = () => {
     isRegisterMode.value = !isRegisterMode.value
 }
 
-const handleSubmit = () => {
+const clearForm = () => {
+    nameInput.value = '';
+    emailInput.value = '';
+    passwordInput.value = ''
+}
+
+const handleSubmit = async () => {
 
     let formValue;
     if (isRegisterMode.value) {
@@ -56,6 +62,8 @@ const handleSubmit = () => {
             email: emailInput.value,
             password: passwordInput.value,
         }
+        await authAction(formValue);
+
     } else {
         if (emailInput.value === '' || passwordInput.value === '') {
             displayAlert({ alertText: 'Please provide all value !!!', alertType: 'danger' });
@@ -65,11 +73,10 @@ const handleSubmit = () => {
             email: emailInput.value,
             password: passwordInput.value,
         }
+        await authAction(formValue);
     }
-    console.log(formValue);
-    displayAlert({ alertText: isRegisterMode.value ? 'Register successfully' : 'Login successfully', alertType: 'success' });
 
+    clearForm()
 }
-
 
 </script>
