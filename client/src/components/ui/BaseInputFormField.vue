@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, InputHTMLAttributes, } from 'vue';
+import { defineProps, InputHTMLAttributes } from 'vue';
 
 interface IBaseFormInputField {
     label: string;
@@ -20,4 +20,5 @@ interface IBaseFormInputField {
 }
 
 defineProps<IBaseFormInputField>();
+
 </script>
