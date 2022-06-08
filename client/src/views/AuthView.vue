@@ -6,7 +6,7 @@
             <h3 class="text-3xl text-center mb-5">
                 {{ isRegisterMode ? 'Register' : 'Login' }}
             </h3>
-            <BaseAlert alert-type="success" alert-text="some alert" />
+            <BaseAlert />
             <BaseInputFormField label="Name" type="name" name="name" v-model="nameInput" v-show="isRegisterMode" />
             <BaseInputFormField label="Email" type="email" name="email" v-model="emailInput" />
             <BaseInputFormField label="Password" type="password" name="password" v-model="passwordInput" />
@@ -29,6 +29,10 @@ import BaseInputFormField from '@/components/ui/BaseInputFormField.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import { ref } from 'vue';
 import BaseAlert from '@/components/ui/BaseAlert.vue';
+import { useGlobalStore } from '@/stores/globalStore';
+
+const globalStore = useGlobalStore();
+const { displayAlert } = globalStore;
 
 const nameInput = ref<string>('');
 const emailInput = ref<string>('');
@@ -40,20 +44,31 @@ const toggleMode = () => {
 }
 
 const handleSubmit = () => {
+
     let formValue;
     if (isRegisterMode.value) {
+        if (nameInput.value === '' || emailInput.value === '' || passwordInput.value === '') {
+            displayAlert({ alertText: 'Please provide all value !!!', alertType: 'danger' });
+            return;
+        }
         formValue = {
             name: nameInput.value,
             email: emailInput.value,
             password: passwordInput.value,
         }
     } else {
+        if (emailInput.value === '' || passwordInput.value === '') {
+            displayAlert({ alertText: 'Please provide all value !!!', alertType: 'danger' });
+            return;
+        }
         formValue = {
             email: emailInput.value,
             password: passwordInput.value,
         }
     }
     console.log(formValue);
+    displayAlert({ alertText: isRegisterMode.value ? 'Register successfully' : 'Login successfully', alertType: 'success' });
+
 }
 
 
