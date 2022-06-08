@@ -79,7 +79,7 @@ export const useGlobalStore = defineStore('global', {
             this.token = token;
             this.addUserToLocalStorage(payload);
         },
-        
+
         async authAction(payload: IRegisterUserPayload | ILoginUserPayload) {
             this.isLoading = true;
             try {
@@ -96,33 +96,5 @@ export const useGlobalStore = defineStore('global', {
                 }
             }
         }
-        // async register(payload: IRegisterUserPayload) {
-        //     this.isLoading = true;
-        //     try {
-        //         const data = await authApi.register(payload);
-        //         this.setUser(data)
-
-        //     } catch (error) {
-        //         if (error instanceof Error) {
-        //             this.displayAlert({ alertText: error.message, alertType: 'danger' })
-        //         }
-        //     }
-        // },
-
-        // async login(payload: ILoginUserPayload) {
-        //     this.isLoading = true;
-        //     try {
-        //         const data = await authApi.login(payload);
-        //         this.setUser(data)
-
-        //     } catch (error) {
-        //         if (error instanceof Error) {
-        //             this.displayAlert({ alertText: error.message, alertType: 'danger' })
-        //         }
-        //     }
-        // },
-
-
     }
-
 })
