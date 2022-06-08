@@ -6,6 +6,7 @@
             <h3 class="text-3xl text-center mb-5">
                 {{ isRegisterMode ? 'Register' : 'Login' }}
             </h3>
+            <BaseAlert alert-type="success" alert-text="some alert" />
             <BaseInputFormField label="Name" type="name" name="name" v-model="nameInput" v-show="isRegisterMode" />
             <BaseInputFormField label="Email" type="email" name="email" v-model="emailInput" />
             <BaseInputFormField label="Password" type="password" name="password" v-model="passwordInput" />
@@ -27,6 +28,7 @@ import LogoSVG from '@/assets/images/logo.svg'
 import BaseInputFormField from '@/components/ui/BaseInputFormField.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import { ref } from 'vue';
+import BaseAlert from '@/components/ui/BaseAlert.vue';
 
 const nameInput = ref<string>('');
 const emailInput = ref<string>('');
