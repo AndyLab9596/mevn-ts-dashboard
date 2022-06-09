@@ -102,10 +102,4 @@ export const useGlobalStore = defineStore('global', {
             }
         }
     },
-
-    getters: {
-        isShowSideBar: (state) => {
-            return state.showSideBar
-        }
-    }
 })
