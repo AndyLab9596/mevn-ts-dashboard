@@ -1,5 +1,5 @@
 <template>
-    <aside class="flex-shrink-0 w-[250px] h-full min-h-screen shadow-lg bg-white">
+    <aside class="flex-shrink-0 w-[250px] h-full min-h-screen shadow-lg bg-white sticky top-0">
         <section>
             <header class="flex justify-center items-center my-6">
                 <LogoSVG class="h-[50px]" />
