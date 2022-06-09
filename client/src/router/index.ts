@@ -5,11 +5,32 @@ const LandingView = () => import('@/views/LandingView.vue');
 const AuthView = () => import('@/views/AuthView.vue');
 const NotFound = () => import('@/views/NotFound.vue');
 
+// Dashboard segment
+const StatsView = () => import('@/views/StatsView.vue');
+const AllJobsView = () => import('@/views/AllJobsView.vue');
+const AddJobView = () => import('@/views/AddJobView.vue');
+const ProfileView = () => import('@/views/ProfileView.vue');
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    redirect: '/stats',
+    children: [
+      {
+        path: 'stats', component: StatsView, name: 'stats'
+      },
+      {
+        path: 'all-jobs', component: AllJobsView, name: 'all-jobs'
+      },
+      {
+        path: 'add-job', component: AddJobView, name: 'add-job'
+      },
+      {
+        path: 'profile', component: ProfileView, name: 'profile'
+      }
+    ]
   },
   {
     path: '/landing',
