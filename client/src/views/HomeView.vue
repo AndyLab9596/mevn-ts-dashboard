@@ -1,6 +1,7 @@
 <template>
   <div>
     <h3>Home View</h3>
+    <RouterView />
   </div>
 </template>
 
@@ -9,5 +10,4 @@
 </script>
 
 <style scoped>
-
 </style>
