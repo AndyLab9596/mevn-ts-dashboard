@@ -102,4 +102,10 @@ export const useGlobalStore = defineStore('global', {
             }
         }
     },
+
+    getters: {
+        isAuthenticated(state) {
+            return !!state.token
+        }
+    }
 })
