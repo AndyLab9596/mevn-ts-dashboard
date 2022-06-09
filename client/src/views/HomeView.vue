@@ -4,7 +4,7 @@
       <BigSideBar />
       <div class="flex-auto">
         <DashboardNavbar />
-        <div>
+        <div class="w-[90vw] mx-auto my-0 py-8 px-0">
           <RouterView />
         </div>
       </div>
@@ -17,6 +17,3 @@ import BigSideBar from '@/components/layout/BigSideBar.vue';
 import DashboardNavbar from '@/components/layout/DashboardNavbar.vue';
 
 </script>
-
-<style scoped>
-</style>

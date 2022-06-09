@@ -7,6 +7,7 @@ interface IGlobalStore {
     showAlert: boolean;
     alertText: string;
     alertType: 'success' | 'danger';
+    showSideBar: boolean;
 
     // auth
     user: IUpdateUser;
@@ -27,7 +28,7 @@ export const useGlobalStore = defineStore('global', {
             showAlert: false,
             alertText: '',
             alertType: 'success',
-
+            showSideBar: true,
             // auth
             user: {
                 email: '',
@@ -55,6 +56,10 @@ export const useGlobalStore = defineStore('global', {
             setTimeout(() => {
                 this.clearAlert()
             }, 3000)
+        },
+
+        toggleSideBar() {
+            this.showSideBar = !this.showSideBar
         },
 
         addUserToLocalStorage(payload: IUserInfo) {
@@ -95,6 +100,12 @@ export const useGlobalStore = defineStore('global', {
                     this.displayAlert({ alertText: error.message, alertType: 'danger' })
                 }
             }
+        }
+    },
+
+    getters: {
+        isShowSideBar: (state) => {
+            return state.showSideBar
         }
     }
 })
