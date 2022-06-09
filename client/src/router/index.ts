@@ -16,9 +16,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'home',
     component: HomeView,
+    redirect: '/stats',
     children: [
       {
-        path: '', component: StatsView
+        path: 'stats', component: StatsView, name: 'stats'
       },
       {
         path: 'all-jobs', component: AllJobsView, name: 'all-jobs'
