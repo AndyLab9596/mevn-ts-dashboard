@@ -1,6 +1,6 @@
 <template>
-    <aside class="sideBar flex-shrink-0 w-[250px] h-full min-h-screen shadow-lg bg-white sticky top-0 "
-        :class="{ '-ml-[250px]': globalStore.isShowSideBar, 'ml-0': !globalStore.isShowSideBar }">
+    <aside class="sideBar flex-shrink-0 h-full min-h-screen shadow-lg bg-white sticky top-0 transition-all duration-300 ease-in"
+        :class="{ 'w-[250px] opacity-100': globalStore.showSideBar, 'w-0 opacity-0': !globalStore.showSideBar }">
 
         <section>
             <header class="flex justify-center items-center my-6">
@@ -18,10 +18,8 @@ import { useGlobalStore } from '@/stores/globalStore';
 import NavLinks from './NavLinks.vue';
 
 const globalStore = useGlobalStore();
+
 </script>
 
 <style>
-.sideBar {
-    transition: margin-left 2s .5s ease-in-out
-}
 </style>

@@ -1,7 +1,7 @@
 <template>
     <nav class="h-20 flex items-center justify-center bg-white shadow-lg">
         <div class="w-[90%] mx-auto flex justify-between items-center">
-            <button class="flex justify-center items-center" @click="globalStore.toggleSideBar()">
+            <button class="flex justify-center items-center" @click="globalStore.toggleSideBar">
                 <vue-feather type="align-left" stroke-width="2.5" stroke="#06b6d4" size="28"></vue-feather>
             </button>
             <h3 class="text-2xl font-semibold">Dashboard</h3>
