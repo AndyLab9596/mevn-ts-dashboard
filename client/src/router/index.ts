@@ -1,3 +1,5 @@
+import { useGlobalStore } from '@/stores/globalStore';
+import { storeToRefs } from 'pinia';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 
 const HomeView = () => import('@/views/HomeView.vue');
@@ -63,6 +65,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, _, next) => {
+  const globalStore = useGlobalStore();
+  const { isAuthenticated } = storeToRefs(globalStore);
+  console.log('isAuthenticated', isAuthenticated.value)
+
   document.title = to.meta.title ? `${to.meta.title} | Jobify` : 'Jobify';
   next()
 })
