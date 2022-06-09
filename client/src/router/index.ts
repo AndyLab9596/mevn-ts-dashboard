@@ -20,6 +20,9 @@ const routes: Array<RouteRecordRaw> = [
     name: 'home',
     component: HomeView,
     redirect: '/stats',
+    meta: {
+      requiresAuth: true,
+    },
     children: [
       {
         path: 'stats', component: StatsView, name: 'stats'
@@ -48,7 +51,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'auth',
     component: AuthView,
     meta: {
-      title: 'Register/Login'
+      title: 'Register/Login',
+      requiresUnAuth: true
     }
   },
   {
