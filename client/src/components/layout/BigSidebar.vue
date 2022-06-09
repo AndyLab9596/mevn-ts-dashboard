@@ -19,6 +19,8 @@ import NavLinks from './NavLinks.vue';
 
 const globalStore = useGlobalStore();
 
+
+
 </script>
 
 <style>
