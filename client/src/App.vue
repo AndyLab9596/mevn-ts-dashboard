@@ -10,6 +10,7 @@ import { useGlobalStore } from './stores/globalStore';
 
 const globalStore = useGlobalStore();
 
+
 onMounted(() => {
   console.log('try login')
   globalStore.tryLogin();

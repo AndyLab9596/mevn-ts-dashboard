@@ -107,11 +107,9 @@ export const useGlobalStore = defineStore('global', {
                 if ('name' in payload) {
                     const data = await authApi.register(payload);
                     this.setUser(data);
-                    this.displayAlert({ alertText: 'Register Successful! Redirecting...', alertType: 'success' })
                 } else {
                     const data = await authApi.login(payload);
                     this.setUser(data);
-                    this.displayAlert({ alertText: 'Login Successful! Redirecting...', alertType: 'success' })
                 }
             } catch (error) {
                 if (error instanceof Error) {

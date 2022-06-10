@@ -7,7 +7,7 @@
                 {{ isRegisterMode ? 'Register' : 'Login' }}
             </h3>
             <BaseAlert />
-            <BaseInputFormField label="Name" type="name" name="name" v-model="nameInput" v-show="isRegisterMode" />
+            <BaseInputFormField label="Name" type="name" name="name" v-model="nameInput" v-if="isRegisterMode" />
             <BaseInputFormField label="Email" type="email" name="email" v-model="emailInput" />
             <BaseInputFormField label="Password" type="password" name="password" v-model="passwordInput" />
             <BaseButton type="submit" class="mt-8">
@@ -64,12 +64,6 @@ const handleSubmit = async () => {
             email: emailInput.value,
             password: passwordInput.value,
         }
-        try {
-            await authAction(formValue);
-            router.push('/');
-        } catch (error) {
-            console.log(error)
-        }
     } else {
         if (emailInput.value === '' || passwordInput.value === '') {
             displayAlert({ alertText: 'Please provide all value !!!', alertType: 'danger' });
@@ -79,15 +73,18 @@ const handleSubmit = async () => {
             email: emailInput.value,
             password: passwordInput.value,
         }
-        try {
-            await authAction(formValue);
-            router.push('/');
-        } catch (error) {
-            console.log(error)
-        }
     }
 
-    clearForm()
+    try {
+        displayAlert({ alertText: 'Processing...', alertType: 'success' });
+        await authAction(formValue);
+        clearForm();
+        router.replace('/');
+    } catch (error) {
+        if (error instanceof Error) {
+            displayAlert({ alertText: error.message, alertType: 'danger' })
+        }
+    }
 }
 
 </script>
