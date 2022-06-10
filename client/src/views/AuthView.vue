@@ -30,7 +30,9 @@ import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInputFormField from '@/components/ui/BaseInputFormField.vue';
 import { useGlobalStore } from '@/stores/globalStore';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const globalStore = useGlobalStore();
 const { displayAlert, authAction } = globalStore;
 
@@ -62,8 +64,12 @@ const handleSubmit = async () => {
             email: emailInput.value,
             password: passwordInput.value,
         }
-        await authAction(formValue);
-
+        try {
+            await authAction(formValue);
+            router.push('/');
+        } catch (error) {
+            console.log(error)
+        }
     } else {
         if (emailInput.value === '' || passwordInput.value === '') {
             displayAlert({ alertText: 'Please provide all value !!!', alertType: 'danger' });
@@ -73,7 +79,12 @@ const handleSubmit = async () => {
             email: emailInput.value,
             password: passwordInput.value,
         }
-        await authAction(formValue);
+        try {
+            await authAction(formValue);
+            router.push('/');
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     clearForm()

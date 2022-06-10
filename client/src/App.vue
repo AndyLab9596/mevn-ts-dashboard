@@ -5,5 +5,15 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue';
+import { useGlobalStore } from './stores/globalStore';
+
+const globalStore = useGlobalStore();
+
+onMounted(() => {
+  console.log('try login')
+  globalStore.tryLogin();
+})
+
 
 </script>

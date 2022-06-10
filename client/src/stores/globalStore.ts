@@ -1,5 +1,6 @@
 import authApi from "@/api/authApi";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo } from "@/models/userTypes";
+import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
 
 interface IGlobalStore {
@@ -10,16 +11,20 @@ interface IGlobalStore {
     showSideBar: boolean;
 
     // auth
-    user: IUpdateUser;
+    user: IUpdateUser | null;
     token: string;
     userLocation: string;
     jobLocation: string;
+    // expirationDate: number;
+    isAutoLogout: boolean;
 }
 
 interface IAlertTextProps {
     alertText: IGlobalStore['alertText'];
     alertType: IGlobalStore['alertType'];
 }
+
+let timer: number | undefined;
 
 export const useGlobalStore = defineStore('global', {
     state: () => {
@@ -38,7 +43,9 @@ export const useGlobalStore = defineStore('global', {
             },
             token: '',
             userLocation: '',
-            jobLocation: ''
+            jobLocation: '',
+            // expirationDate: 0,
+            isAutoLogout: false,
 
         } as IGlobalStore
     },
@@ -76,12 +83,21 @@ export const useGlobalStore = defineStore('global', {
         },
 
         setUser(payload: IUserInfo) {
+            console.log('setUser')
             this.displayAlert({ alertText: 'Login Successful! Redirecting...', alertType: 'success' })
             const { user, location, token } = payload;
+            const expiresIn = extractExpirationDate(token);
+
+            // timer = setTimeout(() => {
+            //     // 
+            // }, expiresIn)
+
             this.user = user;
             this.userLocation = location;
             this.jobLocation = location;
             this.token = token;
+            const expirationDate = expiresIn + new Date().getTime();
+            localStorage.setItem('expirationDate', expirationDate.toString())
             this.addUserToLocalStorage(payload);
         },
 
@@ -91,14 +107,52 @@ export const useGlobalStore = defineStore('global', {
                 if ('name' in payload) {
                     const data = await authApi.register(payload);
                     this.setUser(data);
+                    this.displayAlert({ alertText: 'Register Successful! Redirecting...', alertType: 'success' })
                 } else {
                     const data = await authApi.login(payload);
                     this.setUser(data);
+                    this.displayAlert({ alertText: 'Login Successful! Redirecting...', alertType: 'success' })
                 }
             } catch (error) {
                 if (error instanceof Error) {
                     this.displayAlert({ alertText: error.message, alertType: 'danger' })
                 }
+            }
+        },
+
+        logout() {
+            this.removeUserFromLocalStorage();
+            this.user = null;
+            this.token = '';
+            this.userLocation = '';
+            this.jobLocation = '';
+            clearTimeout(timer);
+        },
+
+        didAutoLogout() {
+            this.logout();
+            this.isAutoLogout = true;
+        },
+
+        tryLogin() {
+            const token = localStorage.getItem('token') as string;
+            const expirationDate = localStorage.getItem('expirationDate') as string;
+            const expiresIn = +expirationDate - extractExpirationDate(token);
+            const user = JSON.parse(localStorage.getItem('user') as string);
+            const location = localStorage.getItem('location') as string;
+
+            console.log(user);
+            console.log(token);
+            console.log(expiresIn);
+            if (expiresIn < 0) {
+                return;
+            }
+
+            timer = setTimeout(() => {
+                this.didAutoLogout();
+            }, expiresIn)
+            if (!!user && !!token) {
+                this.setUser({ user, token, location })
             }
         }
     },

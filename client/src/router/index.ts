@@ -19,6 +19,9 @@ const routes: Array<RouteRecordRaw> = [
     name: 'home',
     component: HomeView,
     redirect: '/stats',
+    meta: {
+      requiresAuth: true,
+    },
     children: [
       {
         path: 'stats', component: StatsView, name: 'stats'
@@ -47,7 +50,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'auth',
     component: AuthView,
     meta: {
-      title: 'Register/Login'
+      title: 'Register/Login',
+      requiresUnAuth: true,
     }
   },
   {
@@ -67,9 +71,14 @@ const router = createRouter({
 router.beforeEach((to, _, next) => {
   const globalStore = useGlobalStore();
   const { isAuthenticated } = storeToRefs(globalStore);
-  console.log('isAuthenticated', isAuthenticated.value)
+  console.log('isAuthenticated', isAuthenticated.value);
 
   document.title = to.meta.title ? `${to.meta.title} | Jobify` : 'Jobify';
+  if (to.meta.requiresAuth && isAuthenticated.value === false) {
+    next('/auth')
+  } else if (to.meta.requiresUnAuth && isAuthenticated.value === true) {
+    next('/')
+  }
   next()
 })
 
