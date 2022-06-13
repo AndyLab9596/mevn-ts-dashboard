@@ -1,5 +1,6 @@
 import authApi from "@/api/authApi";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo } from "@/models/userTypes";
+import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
 
 interface IGlobalStore {
@@ -10,16 +11,19 @@ interface IGlobalStore {
     showSideBar: boolean;
 
     // auth
-    user: IUpdateUser;
+    user: IUpdateUser | null;
     token: string;
     userLocation: string;
     jobLocation: string;
+    isAutoLogout: boolean;
 }
 
 interface IAlertTextProps {
     alertText: IGlobalStore['alertText'];
     alertType: IGlobalStore['alertType'];
 }
+
+let timer: number | undefined;
 
 export const useGlobalStore = defineStore('global', {
     state: () => {
@@ -38,7 +42,8 @@ export const useGlobalStore = defineStore('global', {
             },
             token: '',
             userLocation: '',
-            jobLocation: ''
+            jobLocation: '',
+            isAutoLogout: false,
 
         } as IGlobalStore
     },
@@ -78,10 +83,17 @@ export const useGlobalStore = defineStore('global', {
         setUser(payload: IUserInfo) {
             this.displayAlert({ alertText: 'Login Successful! Redirecting...', alertType: 'success' })
             const { user, location, token } = payload;
+            const expiresIn = extractExpirationDate(token);
+            timer = setTimeout(() => {
+                this.didAutoLogout();
+            }, expiresIn)
+
             this.user = user;
             this.userLocation = location;
             this.jobLocation = location;
             this.token = token;
+            const expirationDate = expiresIn + new Date().getTime();
+            localStorage.setItem('expirationDate', expirationDate.toString())
             this.addUserToLocalStorage(payload);
         },
 
@@ -100,6 +112,45 @@ export const useGlobalStore = defineStore('global', {
                     this.displayAlert({ alertText: error.message, alertType: 'danger' })
                 }
             }
+        },
+
+        logout() {
+            this.removeUserFromLocalStorage();
+            this.user = null;
+            this.token = '';
+            this.userLocation = '';
+            this.jobLocation = '';
+            clearTimeout(timer);
+        },
+
+        didAutoLogout() {
+            this.logout();
+            this.isAutoLogout = true;
+        },
+
+        tryLogin() {
+            const token = localStorage.getItem('token') as string;
+            const expirationDate = localStorage.getItem('expirationDate') as string;
+            const expiresIn = +expirationDate - extractExpirationDate(token);
+            const user = JSON.parse(localStorage.getItem('user') as string);
+            const location = localStorage.getItem('location') as string;
+
+            if (expiresIn < 0) {
+                return;
+            }
+
+            timer = setTimeout(() => {
+                this.didAutoLogout();
+            }, expiresIn)
+            if (!!user && !!token) {
+                this.setUser({ user, token, location })
+            }
         }
     },
+
+    getters: {
+        isAuthenticated(state) {
+            return !!state.token
+        },
+    }
 })

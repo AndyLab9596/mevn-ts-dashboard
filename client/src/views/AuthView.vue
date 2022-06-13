@@ -7,7 +7,7 @@
                 {{ isRegisterMode ? 'Register' : 'Login' }}
             </h3>
             <BaseAlert />
-            <BaseInputFormField label="Name" type="name" name="name" v-model="nameInput" v-show="isRegisterMode" />
+            <BaseInputFormField label="Name" type="name" name="name" v-model="nameInput" v-if="isRegisterMode" />
             <BaseInputFormField label="Email" type="email" name="email" v-model="emailInput" />
             <BaseInputFormField label="Password" type="password" name="password" v-model="passwordInput" />
             <BaseButton type="submit" class="mt-8">
@@ -30,7 +30,9 @@ import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInputFormField from '@/components/ui/BaseInputFormField.vue';
 import { useGlobalStore } from '@/stores/globalStore';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const globalStore = useGlobalStore();
 const { displayAlert, authAction } = globalStore;
 
@@ -62,8 +64,6 @@ const handleSubmit = async () => {
             email: emailInput.value,
             password: passwordInput.value,
         }
-        await authAction(formValue);
-
     } else {
         if (emailInput.value === '' || passwordInput.value === '') {
             displayAlert({ alertText: 'Please provide all value !!!', alertType: 'danger' });
@@ -73,10 +73,18 @@ const handleSubmit = async () => {
             email: emailInput.value,
             password: passwordInput.value,
         }
-        await authAction(formValue);
     }
 
-    clearForm()
+    try {
+        displayAlert({ alertText: 'Processing...', alertType: 'success' });
+        await authAction(formValue);
+        clearForm();
+        router.replace('/');
+    } catch (error) {
+        if (error instanceof Error) {
+            displayAlert({ alertText: error.message, alertType: 'danger' })
+        }
+    }
 }
 
 </script>
