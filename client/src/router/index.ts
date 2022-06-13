@@ -71,7 +71,6 @@ const router = createRouter({
 router.beforeEach((to, _, next) => {
   const globalStore = useGlobalStore();
   const { isAuthenticated } = storeToRefs(globalStore);
-  console.log('isAuthenticated', isAuthenticated.value);
 
   document.title = to.meta.title ? `${to.meta.title} | Jobify` : 'Jobify';
   if (to.meta.requiresAuth && isAuthenticated.value === false) {

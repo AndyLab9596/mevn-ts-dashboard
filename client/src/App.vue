@@ -23,7 +23,6 @@ watch(isAutoLogout, (oldVal, newVal) => {
 })
 
 onMounted(() => {
-  console.log('try login')
   globalStore.tryLogin();
 })
 
