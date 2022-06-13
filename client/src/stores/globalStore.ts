@@ -15,7 +15,6 @@ interface IGlobalStore {
     token: string;
     userLocation: string;
     jobLocation: string;
-    // expirationDate: number;
     isAutoLogout: boolean;
 }
 
@@ -44,7 +43,6 @@ export const useGlobalStore = defineStore('global', {
             token: '',
             userLocation: '',
             jobLocation: '',
-            // expirationDate: 0,
             isAutoLogout: false,
 
         } as IGlobalStore
@@ -83,14 +81,12 @@ export const useGlobalStore = defineStore('global', {
         },
 
         setUser(payload: IUserInfo) {
-            console.log('setUser')
             this.displayAlert({ alertText: 'Login Successful! Redirecting...', alertType: 'success' })
             const { user, location, token } = payload;
             const expiresIn = extractExpirationDate(token);
-
-            // timer = setTimeout(() => {
-            //     // 
-            // }, expiresIn)
+            timer = setTimeout(() => {
+                this.didAutoLogout();
+            }, expiresIn)
 
             this.user = user;
             this.userLocation = location;
@@ -139,9 +135,6 @@ export const useGlobalStore = defineStore('global', {
             const user = JSON.parse(localStorage.getItem('user') as string);
             const location = localStorage.getItem('location') as string;
 
-            console.log(user);
-            console.log(token);
-            console.log(expiresIn);
             if (expiresIn < 0) {
                 return;
             }
@@ -158,6 +151,6 @@ export const useGlobalStore = defineStore('global', {
     getters: {
         isAuthenticated(state) {
             return !!state.token
-        }
+        },
     }
 })
