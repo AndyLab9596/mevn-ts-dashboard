@@ -34,7 +34,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'profile', component: ProfileView, name: 'profile'
-      }
+      } 
     ]
   },
   {
@@ -74,7 +74,7 @@ router.beforeEach((to, _, next) => {
 
   document.title = to.meta.title ? `${to.meta.title} | Jobify` : 'Jobify';
   if (to.meta.requiresAuth && isAuthenticated.value === false) {
-    next('/auth')
+    next('/landing')
   } else if (to.meta.requiresUnAuth && isAuthenticated.value === true) {
     next('/')
   }

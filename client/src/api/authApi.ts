@@ -12,8 +12,8 @@ const authApi = {
         return axiosClient.post(url, payload)
     },
 
-    updateUser(payload: IUpdateUser, id: string) {
-        const url = `/auth/update/${id}`;
+    updateUser(payload: IUpdateUser) : Promise<IUserInfo> {
+        const url = `/auth/update`;
         return axiosClient.patch(url, payload)
     }
 }

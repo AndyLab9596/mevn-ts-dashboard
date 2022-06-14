@@ -1,5 +1,5 @@
 import authApi from "@/api/authApi";
-import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo } from "@/models/userTypes";
+import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo, IUserInfoSaveLocal } from "@/models/userTypes";
 import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
 
@@ -54,6 +54,7 @@ export const useGlobalStore = defineStore('global', {
         },
 
         displayAlert({ alertText, alertType }: IAlertTextProps) {
+            this.clearAlert();
             this.showAlert = true;
             this.alertText = alertText
             this.alertType = alertType;
@@ -67,17 +68,19 @@ export const useGlobalStore = defineStore('global', {
             this.showSideBar = !this.showSideBar
         },
 
-        addUserToLocalStorage(payload: IUserInfo) {
-            const { user, location, token } = payload;
+        addUserToLocalStorage(payload: IUserInfoSaveLocal) {
+            const { user, location, token, expirationDate } = payload;
             localStorage.setItem('user', JSON.stringify(user))
             localStorage.setItem('token', token)
             localStorage.setItem('location', location)
+            localStorage.setItem('expirationDate', expirationDate.toString())
         },
 
         removeUserFromLocalStorage() {
             localStorage.removeItem('token')
             localStorage.removeItem('user')
-            localStorage.removeItem('location')
+            localStorage.removeItem('location');
+            localStorage.removeItem('expirationDate');
         },
 
         setUser(payload: IUserInfo) {
@@ -92,13 +95,13 @@ export const useGlobalStore = defineStore('global', {
             this.userLocation = location;
             this.jobLocation = location;
             this.token = token;
+
             const expirationDate = expiresIn + new Date().getTime();
-            localStorage.setItem('expirationDate', expirationDate.toString())
-            this.addUserToLocalStorage(payload);
+            const localStoragePayload = { user, location, token, expirationDate }
+            this.addUserToLocalStorage(localStoragePayload);
         },
 
         async authAction(payload: IRegisterUserPayload | ILoginUserPayload) {
-            this.isLoading = true;
             try {
                 if ('name' in payload) {
                     const data = await authApi.register(payload);
@@ -144,6 +147,31 @@ export const useGlobalStore = defineStore('global', {
             }, expiresIn)
             if (!!user && !!token) {
                 this.setUser({ user, token, location })
+            }
+        },
+
+        changeUserValue(key: keyof IUpdateUser, value: string) {
+            if (this.user !== null) {
+                this.user[key] = value;
+            }
+        },
+
+        async updateUser() {
+            if (this.user === null) {
+                this.displayAlert({ alertText: 'Something went wrong !', alertType: 'success' })
+                return
+            }
+            this.isLoading = true;
+            try {
+                const userUpdateedInfo = await authApi.updateUser(this.user);
+                this.setUser(userUpdateedInfo);
+                this.displayAlert({ alertText: 'Update success', alertType: 'success' })
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.displayAlert({ alertText: error.message, alertType: 'danger' })
+                }
+            } finally {
+                this.isLoading = false;
             }
         }
     },

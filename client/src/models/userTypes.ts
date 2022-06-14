@@ -16,3 +16,7 @@ export interface IUserInfo {
     token: string;
     location: string
 }
+
+export interface IUserInfoSaveLocal extends IUserInfo {
+    expirationDate: number;
+}

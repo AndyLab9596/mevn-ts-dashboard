@@ -4,7 +4,7 @@
             {{ label }}
         </label>
         <input :type="type" :name="name"
-            class="h-9 w-full px-[0.375rem] py-3 rounded-lg bg-gray-50 border-[1px] border-solid border-gray-200 "
+            class="h-9 w-full px-[0.375rem] p-3 rounded-lg bg-gray-50 border-[1px] border-solid border-gray-400 "
             @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" :value="modelValue" />
     </div>
 </template>
