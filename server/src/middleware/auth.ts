@@ -3,6 +3,11 @@ import { UnauthenticatedError } from '../errors';
 import jwt from 'jsonwebtoken';
 import { Types } from 'mongoose';
 
+declare module "express-serve-static-core" {
+    interface Request {
+        user: { userId: Types.ObjectId }
+    }
+}
 declare module 'express' {
     interface Request {
         user: { userId: Types.ObjectId }

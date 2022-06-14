@@ -1,9 +1,9 @@
-import mongoose, { Types } from "mongoose";
+import mongoose, { Document, Model, Types } from "mongoose";
 import validator from 'validator';
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
-interface IUserSchema {
+export interface IUserSchema extends Document {
     name: string;
     email: string;
     password: string;
@@ -13,6 +13,13 @@ interface IUserSchema {
     createJWT: () => string;
     comparePassword: (candidatePassword: string) => Promise<boolean>;
 }
+
+// export interface IUserMethods {
+//     createJWT(): string;
+//     comparePassword(candidatePassword: string): Promise<boolean>
+// }
+
+// export type UserModel = Model<IUserSchema, {}, IUserMethods>;
 
 const UserSchema = new mongoose.Schema<IUserSchema>({
     name: {

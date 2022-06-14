@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { BadRequestError, NotFoundError, UnauthenticatedError } from '../errors';
+import { BadRequestError, UnauthenticatedError } from '../errors';
 import User from '../models/User';
 
 const register = async (req: Request, res: Response) => {
@@ -43,7 +43,18 @@ const login = async (req: Request, res: Response) => {
 };
 
 const updateUser = async (req: Request, res: Response) => {
-    res.send('updateUser')
+    const { user, body: { name, lastName, email, location } } = req;
+    if (!name || !lastName || !email || !location) throw new BadRequestError('Please provide all values');
+
+    const updatedUser = await User.findOne({ _id: user.userId });
+    if(!updatedUser) return;
+    updatedUser.name = name;
+    updatedUser.lastName = lastName;
+    updatedUser.location = location;
+    await updatedUser.save();
+    const token = updatedUser.createJWT();
+
+    res.status(StatusCodes.OK).json({user: updatedUser, token, location: updatedUser.location})
 };
 
 export {
@@ -51,3 +62,4 @@ export {
     login,
     updateUser
 };
+
