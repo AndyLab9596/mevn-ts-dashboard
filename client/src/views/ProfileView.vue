@@ -57,8 +57,6 @@ const userLocation: WritableComputedRef<string> = computed({
 
 const emailInput = computed(() => globalStore.user?.email);
 
-
-
 const handleSubmit = () => {
     // do something
 }
