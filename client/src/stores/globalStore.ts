@@ -145,6 +145,12 @@ export const useGlobalStore = defineStore('global', {
             if (!!user && !!token) {
                 this.setUser({ user, token, location })
             }
+        },
+
+        changeUserValue(key: keyof IUpdateUser, value: string) {
+            if (this.user !== null) {
+                this.user[key] = value;
+            }
         }
     },
 

@@ -19,13 +19,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
+import { useGlobalStore } from '@/stores/globalStore';
+import { computed, WritableComputedRef } from 'vue';
 
-const nameInput = ref<string>('');
-const lastNameInput = ref<string>('');
-const emailInput = ref<string>('');
-const userLocation = ref<string>('');
+const globalStore = useGlobalStore();
+
+const nameInput: WritableComputedRef<string> = computed({
+    get(): string {
+        const nameInput = globalStore.user ? globalStore.user.name : '';
+        return nameInput;
+    },
+    set(value: string): void {
+        return globalStore.changeUserValue('name', value)
+    }
+});
+
+const lastNameInput: WritableComputedRef<string> = computed({
+    get(): string {
+        const nameInput = globalStore.user ? globalStore.user.lastName : '';
+        return nameInput;
+    },
+    set(value: string): void {
+        return globalStore.changeUserValue('lastName', value)
+    }
+});
+
+const userLocation: WritableComputedRef<string> = computed({
+    get(): string {
+        const nameInput = globalStore.user ? globalStore.user.location : '';
+        return nameInput;
+    },
+    set(value: string): void {
+        return globalStore.changeUserValue('location', value)
+    }
+});
+
+const emailInput = computed(() => globalStore.user?.email);
+
+
 
 const handleSubmit = () => {
     // do something
