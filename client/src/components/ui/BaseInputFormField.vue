@@ -3,10 +3,10 @@
         <label :htmlFor="name" class="block text-lg mb-2 capitalize tracking-wide">
             {{ label }}
         </label>
-        <input :type="type" :name="name"
+        <input :type="type" :name="name" :disabled="isDisabled"
             class="h-9 w-full px-[0.375rem] p-3 rounded-lg bg-gray-50 border-[1px] border-solid border-gray-400 "
-            ref="inputRef" @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-            :value="modelValue" />
+            :class="{ 'cursor-not-allowed': isDisabled }" ref="inputRef"
+            @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" :value="modelValue" />
     </div>
 </template>
 
@@ -18,6 +18,7 @@ interface IBaseFormInputField {
     type: InputHTMLAttributes['type'];
     name: string;
     modelValue: string;
+    isDisabled?: boolean;
 }
 
 defineProps<IBaseFormInputField>();
