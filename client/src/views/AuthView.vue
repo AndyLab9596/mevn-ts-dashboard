@@ -7,8 +7,10 @@
                 {{ isRegisterMode ? 'Register' : 'Login' }}
             </h3>
             <BaseAlert />
-            <BaseInputFormField label="Name" type="name" name="name" v-model="nameInput" v-if="isRegisterMode" />
-            <BaseInputFormField label="Email" type="email" name="email" v-model="emailInput" />
+            <BaseInputFormField label="Name" type="name" name="name" v-model="nameInput" v-if="isRegisterMode"
+                ref="baseNameComponentRef" />
+            <BaseInputFormField label="Email" type="email" name="email" v-model="emailInput"
+                ref="baseEmailComponentRef" />
             <BaseInputFormField label="Password" type="password" name="password" v-model="passwordInput" />
             <BaseButton type="submit" class="mt-8">
                 {{ isRegisterMode ? 'Register' : 'Login' }}
@@ -29,20 +31,31 @@ import BaseAlert from '@/components/ui/BaseAlert.vue';
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseInputFormField from '@/components/ui/BaseInputFormField.vue';
 import { useGlobalStore } from '@/stores/globalStore';
-import { ref } from 'vue';
+import { ComponentPublicInstance, nextTick, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const globalStore = useGlobalStore();
 const { displayAlert, authAction } = globalStore;
 
+const baseEmailComponentRef = ref<ComponentPublicInstance<typeof BaseInputFormField & { inputFocus: () => void }>>();
+const baseNameComponentRef = ref<ComponentPublicInstance<typeof BaseInputFormField & { inputFocus: () => void }>>();
+
 const nameInput = ref<string>('');
 const emailInput = ref<string>('');
 const passwordInput = ref<string>('');
 
 const isRegisterMode = ref<boolean>(false);
-const toggleMode = () => {
-    isRegisterMode.value = !isRegisterMode.value
+const toggleMode = async () => {
+    isRegisterMode.value = !isRegisterMode.value;
+
+    await nextTick(() => {
+        if (isRegisterMode.value === true) {
+            baseNameComponentRef.value?.inputFocus()
+        } else {
+            baseEmailComponentRef.value?.inputFocus()
+        }
+    })
 }
 
 const clearForm = () => {
@@ -85,6 +98,12 @@ const handleSubmit = async () => {
             displayAlert({ alertText: error.message, alertType: 'danger' })
         }
     }
-}
+};
+
+
+onMounted(() => {
+    baseEmailComponentRef.value?.inputFocus();
+})
+
 
 </script>

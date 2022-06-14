@@ -132,8 +132,9 @@ export const useGlobalStore = defineStore('global', {
         },
 
         tryLogin() {
-            const token = localStorage.getItem('token') as string;
             const expirationDate = localStorage.getItem('expirationDate') as string;
+            if(typeof expirationDate !== 'string') return;
+            const token = localStorage.getItem('token') as string;
             const expiresIn = +expirationDate - extractExpirationDate(token);
             const user = JSON.parse(localStorage.getItem('user') as string);
             const location = localStorage.getItem('location') as string;
