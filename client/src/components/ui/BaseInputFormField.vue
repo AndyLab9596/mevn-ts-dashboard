@@ -5,12 +5,13 @@
         </label>
         <input :type="type" :name="name"
             class="h-9 w-full px-[0.375rem] p-3 rounded-lg bg-gray-50 border-[1px] border-solid border-gray-400 "
-            @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)" :value="modelValue" />
+            ref="inputRef" @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
+            :value="modelValue" />
     </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, InputHTMLAttributes } from 'vue';
+import { defineProps, InputHTMLAttributes, ref, defineExpose } from 'vue';
 
 interface IBaseFormInputField {
     label: string;
@@ -20,5 +21,14 @@ interface IBaseFormInputField {
 }
 
 defineProps<IBaseFormInputField>();
+
+const inputRef = ref<HTMLInputElement | null>(null);
+const inputFocus = () => {
+    inputRef.value?.focus();
+};
+
+defineExpose({
+    inputFocus,
+})
 
 </script>
