@@ -54,6 +54,7 @@ export const useGlobalStore = defineStore('global', {
         },
 
         displayAlert({ alertText, alertType }: IAlertTextProps) {
+            this.clearAlert();
             this.showAlert = true;
             this.alertText = alertText
             this.alertType = alertType;
@@ -101,7 +102,6 @@ export const useGlobalStore = defineStore('global', {
         },
 
         async authAction(payload: IRegisterUserPayload | ILoginUserPayload) {
-            this.isLoading = true;
             try {
                 if ('name' in payload) {
                     const data = await authApi.register(payload);
@@ -153,6 +153,25 @@ export const useGlobalStore = defineStore('global', {
         changeUserValue(key: keyof IUpdateUser, value: string) {
             if (this.user !== null) {
                 this.user[key] = value;
+            }
+        },
+
+        async updateUser() {
+            if (this.user === null) {
+                this.displayAlert({ alertText: 'Something went wrong !', alertType: 'success' })
+                return
+            }
+            this.isLoading = true;
+            try {
+                const userUpdateedInfo = await authApi.updateUser(this.user);
+                this.setUser(userUpdateedInfo);
+                this.displayAlert({ alertText: 'Update success', alertType: 'success' })
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.displayAlert({ alertText: error.message, alertType: 'danger' })
+                }
+            } finally {
+                this.isLoading = false;
             }
         }
     },

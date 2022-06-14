@@ -1,6 +1,9 @@
 <template>
     <section class="w-[90%] mx-0 my-auto px-8 py-0">
-        <div class="rounded-lg w-full bg-white pt-12 pb-16 px-8">
+        <div v-if="globalStore.isLoading" class="rounded-lg w-full bg-cyan-50 pt-12 pb-16 px-8 flex justify-center items-center min-h-[500px]">
+            <BaseSpinner />
+        </div>
+        <div v-else class="rounded-lg w-full bg-cyan-50 pt-12 pb-16 px-8">
             <form @submit.prevent="handleSubmit">
                 <h3 class="text-3xl mb-4">Profile</h3>
 
@@ -9,9 +12,11 @@
                     <BaseInputFormField label="Last Name" type="text" name="lastName" v-model="lastNameInput" />
                     <BaseInputFormField label="Email" type="email" name="email" v-model="emailInput" />
                     <BaseInputFormField label="Location" type="text" name="userLocation" v-model="userLocation" />
-                    <BaseButton type="submit">
-                        Save Changes
-                    </BaseButton>
+                    <div class="mt-[18px]">
+                        <BaseButton type="submit">
+                            Save Changes
+                        </BaseButton>
+                    </div>
                 </div>
             </form>
         </div>
@@ -57,8 +62,8 @@ const userLocation: WritableComputedRef<string> = computed({
 
 const emailInput = computed(() => globalStore.user?.email);
 
-const handleSubmit = () => {
-    // do something
+const handleSubmit = async () => {
+    await globalStore.updateUser()
 }
 
 </script>
