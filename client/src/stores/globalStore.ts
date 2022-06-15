@@ -1,4 +1,5 @@
 import authApi from "@/api/authApi";
+import { TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo, IUserInfoSaveLocal } from "@/models/userTypes";
 import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
@@ -16,6 +17,17 @@ interface IGlobalStore {
     userLocation: string;
     jobLocation: string;
     isAutoLogout: boolean;
+
+    // jobs
+    isEditing: boolean;
+    editJobId: string;
+    position: string;
+    company: string;
+    jobTypeOptions: TJobTypeOptions;
+    statusOptions: TStatusOptions;
+    jobType: TJobType;
+    status: TStatus;
+    
 }
 
 interface IAlertTextProps {
@@ -84,7 +96,7 @@ export const useGlobalStore = defineStore('global', {
         },
 
         setUser(payload: IUserInfo) {
-            this.displayAlert({ alertText: 'Login Successful! Redirecting...', alertType: 'success' })
+
             const { user, location, token } = payload;
             const expiresIn = extractExpirationDate(token);
             timer = setTimeout(() => {
@@ -133,7 +145,7 @@ export const useGlobalStore = defineStore('global', {
 
         tryLogin() {
             const expirationDate = localStorage.getItem('expirationDate') as string;
-            if(typeof expirationDate !== 'string') return;
+            if (typeof expirationDate !== 'string') return;
             const token = localStorage.getItem('token') as string;
             const expiresIn = +expirationDate - extractExpirationDate(token);
             const user = JSON.parse(localStorage.getItem('user') as string);
