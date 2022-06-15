@@ -44,8 +44,8 @@ const nameInput: WritableComputedRef<string> = computed({
 
 const lastNameInput: WritableComputedRef<string> = computed({
     get(): string {
-        const nameInput = globalStore.user ? globalStore.user.lastName : '';
-        return nameInput;
+        const lastNameInput = globalStore.user ? globalStore.user.lastName : '';
+        return lastNameInput;
     },
     set(value: string): void {
         return globalStore.changeUserValue('lastName', value)
@@ -54,8 +54,8 @@ const lastNameInput: WritableComputedRef<string> = computed({
 
 const userLocation: WritableComputedRef<string> = computed({
     get(): string {
-        const nameInput = globalStore.user ? globalStore.user.location : '';
-        return nameInput;
+        const userLocation = globalStore.user ? globalStore.user.location : '';
+        return userLocation;
     },
     set(value: string): void {
         return globalStore.changeUserValue('location', value)

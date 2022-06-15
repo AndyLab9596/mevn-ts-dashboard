@@ -1,5 +1,5 @@
 import authApi from "@/api/authApi";
-import { TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
+import { IPayloadCreateJob, TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo, IUserInfoSaveLocal } from "@/models/userTypes";
 import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
@@ -27,13 +27,18 @@ interface IGlobalStore {
     statusOptions: TStatusOptions;
     jobType: TJobType;
     status: TStatus;
-    
+
 }
 
 interface IAlertTextProps {
     alertText: IGlobalStore['alertText'];
     alertType: IGlobalStore['alertType'];
 }
+
+// interface IChangeJobInfo {
+//     key: keyof IPayloadCreateJob;
+//     value: IPayloadCreateJob[keyof IPayloadCreateJob];
+// }
 
 let timer: number | undefined;
 
@@ -186,6 +191,10 @@ export const useGlobalStore = defineStore('global', {
             } finally {
                 this.isLoading = false;
             }
+        },
+
+        changeJobInfo(key: keyof IPayloadCreateJob, value: any) {
+            this[key] = value
         }
     },
 
