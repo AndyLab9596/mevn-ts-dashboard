@@ -27,7 +27,6 @@ interface IGlobalStore {
     statusOptions: TStatusOptions;
     jobType: TJobType;
     status: TStatus;
-
 }
 
 interface IAlertTextProps {
@@ -35,10 +34,6 @@ interface IAlertTextProps {
     alertType: IGlobalStore['alertType'];
 }
 
-// interface IChangeJobInfo {
-//     key: keyof IPayloadCreateJob;
-//     value: IPayloadCreateJob[keyof IPayloadCreateJob];
-// }
 
 let timer: number | undefined;
 
@@ -61,6 +56,10 @@ export const useGlobalStore = defineStore('global', {
             userLocation: '',
             jobLocation: '',
             isAutoLogout: false,
+            jobType: 'full-time',
+            status: 'pending',
+            jobTypeOptions: ['full-time', 'part-time', 'remote', 'internship'],
+            statusOptions: ['pending', 'interview', 'declined'],
 
         } as IGlobalStore
     },
@@ -193,9 +192,9 @@ export const useGlobalStore = defineStore('global', {
             }
         },
 
-        changeJobInfo(key: keyof IPayloadCreateJob, value: any) {
-            this[key] = value
-        }
+        // changeJobInfo(key: any, value: any) {
+        //     this[key] = value
+        // }
     },
 
     getters: {

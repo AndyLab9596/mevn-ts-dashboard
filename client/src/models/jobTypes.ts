@@ -6,10 +6,9 @@ type TypeJobOptions = {
 };
 
 type TypeStatus = {
-    FULL_TIME: 'full-time',
-    PART_TIME: 'part-time',
-    REMOTE: 'remote',
-    INTERNSHIP: 'internship'
+    PENDING: 'pending',
+    INTERVIEW: 'interview',
+    DECLINED: 'declined',
 };
 
 type TJobTypeOptions = ['full-time', 'part-time', 'remote', 'internship'];
