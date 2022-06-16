@@ -1,5 +1,5 @@
 import authApi from "@/api/authApi";
-import { IPayloadCreateJob, TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
+import { IPayloadCreateJob, jobTypeOptions, statusOptions, TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo, IUserInfoSaveLocal } from "@/models/userTypes";
 import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
@@ -35,10 +35,6 @@ interface IAlertTextProps {
     alertType: IGlobalStore['alertType'];
 }
 
-// interface IChangeJobInfo {
-//     key: keyof IPayloadCreateJob;
-//     value: IPayloadCreateJob[keyof IPayloadCreateJob];
-// }
 
 let timer: number | undefined;
 
@@ -63,9 +59,8 @@ export const useGlobalStore = defineStore('global', {
             isAutoLogout: false,
             jobType: 'full-time',
             status: 'pending',
-            jobTypeOptions: ['full-time', 'part-time', 'remote', 'internship'],
-            statusOptions: ['pending', 'interview', 'declined']
-
+            jobTypeOptions,
+            statusOptions,
         } as IGlobalStore
     },
 
@@ -197,9 +192,8 @@ export const useGlobalStore = defineStore('global', {
             }
         },
 
-        changeJobInfo(key: keyof IPayloadCreateJob, value: IPayloadCreateJob[keyof IPayloadCreateJob]) {
-            console.log(key, value)
-            // this[key] = value
+        changeJobInfo<T extends keyof IPayloadCreateJob>(key: T, value: IGlobalStore[T]) {
+            this.$state[key] = value;
         }
     },
 

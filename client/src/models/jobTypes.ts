@@ -1,21 +1,11 @@
-type TypeJobOptions = {
-    FULL_TIME: 'full-time',
-    PART_TIME: 'part-time',
-    REMOTE: 'remote',
-    INTERNSHIP: 'internship'
-};
+const jobTypeOptions = ['full-time', 'part-time', 'remote', 'internship'] as const;
+type TJobTypeOptions = typeof jobTypeOptions;
+type TJobType = TJobTypeOptions[number];
 
-type TypeStatus = {
-    PENDING: 'pending',
-    INTERVIEW: 'interview',
-    DECLINED: 'declined',
-};
+const statusOptions = ['pending', 'interview', 'declined'] as const;
+type TStatusOptions = typeof statusOptions;
+type TStatus = TStatusOptions[number];
 
-type TJobTypeOptions = ['full-time', 'part-time', 'remote', 'internship'];
-type TStatusOptions = ['pending', 'interview', 'declined'];
-
-type TJobType = TypeJobOptions[keyof TypeJobOptions];
-type TStatus = TypeStatus[keyof TypeStatus];
 
 interface IPayloadCreateJob {
     position: string;
@@ -26,6 +16,8 @@ interface IPayloadCreateJob {
 }
 
 export {
+    jobTypeOptions,
+    statusOptions,
     TJobTypeOptions,
     TStatusOptions,
     TJobType,
