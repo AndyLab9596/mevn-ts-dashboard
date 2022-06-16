@@ -1,4 +1,5 @@
 import authApi from "@/api/authApi";
+import jobApi from "@/api/jobApi";
 import { IPayloadCreateJob, jobTypeOptions, statusOptions, TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo, IUserInfoSaveLocal } from "@/models/userTypes";
 import { extractExpirationDate } from "@/utils/helper";
@@ -53,10 +54,15 @@ export const useGlobalStore = defineStore('global', {
                 location: '',
                 name: ''
             },
+            isAutoLogout: false,
             token: '',
             userLocation: '',
+
+            isEditing: false,
+            editJobId: '',
+            position: '',
+            company: '',
             jobLocation: '',
-            isAutoLogout: false,
             jobType: 'full-time',
             status: 'pending',
             jobTypeOptions,
@@ -194,6 +200,40 @@ export const useGlobalStore = defineStore('global', {
 
         changeJobInfo<T extends keyof IPayloadCreateJob>(key: T, value: IGlobalStore[T]) {
             this.$state[key] = value;
+        },
+
+        resetJobInfo() {
+            this.position = '';
+            this.company = '';
+            this.jobLocation = '';
+            this.status = 'pending';
+            this.jobType = 'full-time';
+        },
+
+        async setupJob(jobId = "") {
+            const payload: IPayloadCreateJob = {
+                position: this.position,
+                company: this.company,
+                jobLocation: this.jobLocation,
+                status: this.status,
+                jobType: this.jobType,
+            };
+
+            try {
+                if (this.isEditing === false) {
+                    await jobApi.createJob(payload);
+                    this.displayAlert({ alertText: 'Create Job Success', alertType: 'success' })
+                } else {
+                    await jobApi.updateJob({ payload, jobId });
+                    this.displayAlert({ alertText: 'Update Job Success', alertType: 'success' })
+                }
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.displayAlert({ alertText: error.message, alertType: 'danger' })
+                }
+            } finally {
+                this.resetJobInfo();
+            }
         }
     },
 

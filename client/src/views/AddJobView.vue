@@ -38,6 +38,7 @@ const { jobTypeOptions, statusOptions } = storeToRefs(globalStore);
 
 const handleSubmit = async () => {
     // do something
+    await globalStore.setupJob()
 }
 
 const positionInput = computed({
