@@ -5,8 +5,10 @@ import './assets/tailwind.css'
 import BaseButton from '@/components/ui/BaseButton.vue';
 import BaseButtonLink from '@/components/ui/BaseButtonLink.vue';
 import BaseInputFormField from '@/components/ui/BaseInputFormField.vue';
+import BaseSelectFormField from '@/components/ui/BaseSelectFormField.vue';
 import BaseAlert from '@/components/ui/BaseAlert.vue';
 import BaseSpinner from '@/components/ui/BaseSpinner.vue';
+import DashboardContent from '@/components/layout/DashboardContent.vue';
 import { createPinia } from 'pinia';
 import VueFeather from 'vue-feather';
 
@@ -18,6 +20,8 @@ app.component('BaseButton', BaseButton);
 app.component('BaseInputFormField', BaseInputFormField);
 app.component('BaseAlert', BaseAlert);
 app.component('BaseSpinner', BaseSpinner);
+app.component('DashboardContent', DashboardContent);
+app.component('BaseSelectFormField', BaseSelectFormField);
 app.component(VueFeather.name, VueFeather);
 
 app.mount('#app');

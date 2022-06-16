@@ -1,4 +1,6 @@
 import authApi from "@/api/authApi";
+import jobApi from "@/api/jobApi";
+import { IPayloadCreateJob, jobTypeOptions, statusOptions, TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo, IUserInfoSaveLocal } from "@/models/userTypes";
 import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
@@ -16,12 +18,24 @@ interface IGlobalStore {
     userLocation: string;
     jobLocation: string;
     isAutoLogout: boolean;
+
+    // jobs
+    isEditing: boolean;
+    editJobId: string;
+    position: string;
+    company: string;
+    jobTypeOptions: TJobTypeOptions;
+    statusOptions: TStatusOptions;
+    jobType: TJobType;
+    status: TStatus;
+
 }
 
 interface IAlertTextProps {
     alertText: IGlobalStore['alertText'];
     alertType: IGlobalStore['alertType'];
 }
+
 
 let timer: number | undefined;
 
@@ -40,11 +54,19 @@ export const useGlobalStore = defineStore('global', {
                 location: '',
                 name: ''
             },
+            isAutoLogout: false,
             token: '',
             userLocation: '',
-            jobLocation: '',
-            isAutoLogout: false,
 
+            isEditing: false,
+            editJobId: '',
+            position: '',
+            company: '',
+            jobLocation: '',
+            jobType: 'full-time',
+            status: 'pending',
+            jobTypeOptions,
+            statusOptions,
         } as IGlobalStore
     },
 
@@ -84,7 +106,7 @@ export const useGlobalStore = defineStore('global', {
         },
 
         setUser(payload: IUserInfo) {
-            this.displayAlert({ alertText: 'Login Successful! Redirecting...', alertType: 'success' })
+
             const { user, location, token } = payload;
             const expiresIn = extractExpirationDate(token);
             timer = setTimeout(() => {
@@ -133,7 +155,7 @@ export const useGlobalStore = defineStore('global', {
 
         tryLogin() {
             const expirationDate = localStorage.getItem('expirationDate') as string;
-            if(typeof expirationDate !== 'string') return;
+            if (typeof expirationDate !== 'string') return;
             const token = localStorage.getItem('token') as string;
             const expiresIn = +expirationDate - extractExpirationDate(token);
             const user = JSON.parse(localStorage.getItem('user') as string);
@@ -173,6 +195,44 @@ export const useGlobalStore = defineStore('global', {
                 }
             } finally {
                 this.isLoading = false;
+            }
+        },
+
+        changeJobInfo<T extends keyof IPayloadCreateJob>(key: T, value: IGlobalStore[T]) {
+            this.$state[key] = value;
+        },
+
+        resetJobInfo() {
+            this.position = '';
+            this.company = '';
+            this.jobLocation = '';
+            this.status = 'pending';
+            this.jobType = 'full-time';
+        },
+
+        async setupJob(jobId = "") {
+            const payload: IPayloadCreateJob = {
+                position: this.position,
+                company: this.company,
+                jobLocation: this.jobLocation,
+                status: this.status,
+                jobType: this.jobType,
+            };
+
+            try {
+                if (this.isEditing === false) {
+                    await jobApi.createJob(payload);
+                    this.displayAlert({ alertText: 'Create Job Success', alertType: 'success' })
+                } else {
+                    await jobApi.updateJob({ payload, jobId });
+                    this.displayAlert({ alertText: 'Update Job Success', alertType: 'success' })
+                }
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.displayAlert({ alertText: error.message, alertType: 'danger' })
+                }
+            } finally {
+                this.resetJobInfo();
             }
         }
     },

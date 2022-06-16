@@ -97,6 +97,8 @@ const handleSubmit = async () => {
         if (error instanceof Error) {
             displayAlert({ alertText: error.message, alertType: 'danger' })
         }
+    } finally {
+        globalStore.clearAlert()
     }
 };
 
