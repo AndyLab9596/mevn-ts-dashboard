@@ -29,6 +29,10 @@ interface IGlobalStore {
     jobType: TJobType;
     status: TStatus;
 
+    jobs: IPayloadCreateJob[];
+    totalJobs: number;
+    numOfPages: number;
+    page: number;
 }
 
 interface IAlertTextProps {
@@ -67,6 +71,11 @@ export const useGlobalStore = defineStore('global', {
             status: 'pending',
             jobTypeOptions,
             statusOptions,
+
+            jobs: [],
+            totalJobs: 0,
+            numOfPages: 1,
+            page: 1,
         } as IGlobalStore
     },
 
@@ -233,6 +242,22 @@ export const useGlobalStore = defineStore('global', {
                 }
             } finally {
                 this.resetJobInfo();
+            }
+        },
+
+        async getAllJobs() {
+            try {
+                this.isLoading = true;
+                const { jobs, totalJobs } = await jobApi.getAllJobs();
+                this.jobs = jobs;
+                this.totalJobs = totalJobs
+
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.displayAlert({ alertText: error.message, alertType: 'danger' })
+                }
+            } finally {
+                this.isLoading = false
             }
         }
     },

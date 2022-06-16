@@ -6,13 +6,18 @@ interface IUpdateJobProps {
     jobId: string;
 }
 
+interface IAllJobsReturn {
+    jobs: IPayloadCreateJob[];
+    totalJobs: number
+}
+
 const jobApi = {
     createJob(payload: IPayloadCreateJob): Promise<IPayloadCreateJob> {
         const url = '/job';
         return axiosClient.post(url, payload)
     },
 
-    getAllJobs(): Promise<IPayloadCreateJob[]> {
+    getAllJobs(): Promise<IAllJobsReturn> {
         const url = '/job';
         return axiosClient.get(url)
     },
