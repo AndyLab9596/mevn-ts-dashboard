@@ -1,5 +1,5 @@
 <template>
-    <section class="w-[90%] mx-0 my-auto px-8 py-0">
+    <section class="w-[90%] mx-auto my-auto py-0">
         <div v-if="globalStore.isLoading"
             class="rounded-lg w-full bg-cyan-50 pt-12 pb-16 px-8 flex justify-center items-center min-h-[500px]">
             <BaseSpinner />

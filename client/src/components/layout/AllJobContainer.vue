@@ -1,5 +1,5 @@
 <template>
-    <section class="rounded-lg w-full bg-cyan-50 pt-12 pb-16 px-8 grid-cols-1 lg:grid-cols-2 lg:gap-4">
+    <section class="rounded-lg w-full bg-cyan-50 pt-12 pb-16 px-8 grid grid-cols-1 lg:grid-cols-2 gap-4">
         <BaseCard v-for="n in 4" :key="n" />
     </section>
 </template>

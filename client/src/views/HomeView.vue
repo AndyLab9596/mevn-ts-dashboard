@@ -1,10 +1,10 @@
 <template>
-  <section>
+  <section class="max-w-full overflow-hidden">
     <main class="flex h-full">
       <BigSideBar />
-      <div class="flex-auto">
+      <div class="flex-1 w-full" :class="{'w-[80%]': globalStore.showSideBar}">
         <DashboardNavbar />
-        <div class="w-[90vw] mx-auto my-0 py-8 px-0">
+        <div class="w-[90%] mx-auto my-0 py-8 px-0">
           <RouterView />
         </div>
       </div>
@@ -15,5 +15,8 @@
 <script setup lang="ts">
 import BigSideBar from '@/components/layout/BigSideBar.vue';
 import DashboardNavbar from '@/components/layout/DashboardNavbar.vue';
+import { useGlobalStore } from '@/stores/globalStore';
+
+const globalStore = useGlobalStore();
 
 </script>
