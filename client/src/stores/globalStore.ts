@@ -295,6 +295,18 @@ export const useGlobalStore = defineStore('global', {
                     this.displayAlert({ alertText: error.message, alertType: 'danger' })
                 }
             }
+        },
+
+        async deleteJob(id: string) {
+            try {
+                await jobApi.deleteJob(id);
+                this.displayAlert({ alertText: 'Delete Job Success', alertType: 'success' });
+                await this.getAllJobs();
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.displayAlert({ alertText: error.message, alertType: 'danger' })
+                }
+            }
         }
     },
 

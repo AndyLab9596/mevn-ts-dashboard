@@ -50,7 +50,8 @@
                         class="bg-green-200 text-green-700 mr-3 cursor-pointer px-4 py-2 rounded-md text-sm font-normal">
                         Edit
                     </button>
-                    <button class="bg-red-200 text-red-700 cursor-pointer rounded-md px-2 py-2 text-sm font-normal">
+                    <button @click="handleDeleteJob(job._id)"
+                        class="bg-red-200 text-red-700 cursor-pointer rounded-md px-2 py-2 text-sm font-normal">
                         Delete
                     </button>
                 </div>
@@ -74,9 +75,14 @@ defineProps<IBaseCard>();
 
 const router = useRouter();
 const globalStore = useGlobalStore();
+
 const handleEditJob = (id: IJobInterfaceData['_id']) => {
     globalStore.editJob(id);
     router.push('/add-job')
+};
+
+const handleDeleteJob = async (id: IJobInterfaceData['_id']) => {
+    await globalStore.deleteJob(id)
 }
 
 </script>
