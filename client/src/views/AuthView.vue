@@ -7,7 +7,7 @@
                 {{ isRegisterMode ? 'Register' : 'Login' }}
             </h3>
             <BaseAlert />
-            <BaseInputFormField label="Name" type="name" name="name" v-model="nameInput" v-if="isRegisterMode"
+            <BaseInputFormField label="Name" type="text" name="name" v-model="nameInput" v-if="isRegisterMode"
                 ref="baseNameComponentRef" />
             <BaseInputFormField label="Email" type="email" name="email" v-model="emailInput"
                 ref="baseEmailComponentRef" />

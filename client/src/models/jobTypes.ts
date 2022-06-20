@@ -6,6 +6,24 @@ const statusOptions = ['pending', 'interview', 'declined'] as const;
 type TStatusOptions = typeof statusOptions;
 type TStatus = TStatusOptions[number];
 
+const searchJobTypeOptions = ['all', 'full-time', 'part-time', 'remote', 'internship'] as const;
+type TSearchJobTypeOptions = typeof searchJobTypeOptions;
+type TSearchJobType = TSearchJobTypeOptions[number];
+
+const searchStatusOptions = ['all', 'pending', 'interview', 'declined'] as const;
+type TSearchStatusOptions = typeof searchStatusOptions;
+type TSearchStatus = TSearchStatusOptions[number];
+
+const sortOptions = ['latest', 'oldest', 'a-z', 'z-a'] as const;
+type TSortOptions = typeof sortOptions;
+type TSort = TSortOptions[number];
+
+interface IPayloadSearchJob {
+    search: string;
+    searchStatus: TSearchStatus,
+    searchType: TSearchJobType,
+    sort: TSort,
+}
 
 interface IPayloadCreateJob {
     position: string;
@@ -15,7 +33,7 @@ interface IPayloadCreateJob {
     jobLocation: string;
 }
 
-interface IJobInterfaceData extends IPayloadCreateJob{
+interface IJobInterfaceData extends IPayloadCreateJob {
     createdAt: Date;
     _id: string;
 }
@@ -28,5 +46,15 @@ export {
     TJobType,
     TStatus,
     IPayloadCreateJob,
-    IJobInterfaceData
+    IJobInterfaceData,
+    sortOptions,
+    TSortOptions,
+    TSort,
+    searchJobTypeOptions,
+    TSearchJobTypeOptions,
+    TSearchJobType,
+    searchStatusOptions,
+    TSearchStatusOptions,
+    TSearchStatus,
+    IPayloadSearchJob
 }
