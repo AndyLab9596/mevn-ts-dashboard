@@ -1,5 +1,5 @@
 <template>
-    <article class="bg-white grid-rows-2 shadow-lg px-4 py-8 rounded-lg border-[1px] border-blue-300">
+    <article class="bg-white grid-rows-2 shadow-md px-4 py-8 rounded-lg border-[1px] border-blue-300 hover:shadow-xl transition-shadow duration-300">
         <header class="row-auto p-1 border-b-slate-300 border-b-2 flex items-center">
             <div
                 class="w-14 h-14 rounded-xl uppercase grid place-items-center bg-cyan-500 text-xl font-bold mr-8 text-white">
@@ -64,7 +64,7 @@
 import { IJobInterfaceData } from '@/models/jobTypes';
 import { useGlobalStore } from '@/stores/globalStore';
 import moment from 'moment';
-import { defineProps } from 'vue';
+import { defineProps, inject } from 'vue';
 import { useRouter } from 'vue-router';
 
 interface IBaseCard {
@@ -76,13 +76,15 @@ defineProps<IBaseCard>();
 const router = useRouter();
 const globalStore = useGlobalStore();
 
+const openDialog = inject<(id: string) => void>('dialog');
+
 const handleEditJob = (id: IJobInterfaceData['_id']) => {
     globalStore.editJob(id);
     router.push('/add-job')
 };
 
 const handleDeleteJob = async (id: IJobInterfaceData['_id']) => {
-    await globalStore.deleteJob(id)
+    openDialog && openDialog(id);
 }
 
 </script>
