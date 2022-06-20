@@ -8,13 +8,9 @@
 import BaseCard from '@/components/ui/BaseCard.vue';
 import { useGlobalStore } from '@/stores/globalStore';
 import { storeToRefs } from 'pinia';
-import { ref } from 'vue';
 
 const globalStore = useGlobalStore();
 const {jobs} = storeToRefs(globalStore);
 
-console.log(globalStore.jobs);
-
-const n = ref(1)
 
 </script>

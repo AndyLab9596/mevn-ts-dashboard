@@ -1,5 +1,5 @@
 <template>
-    <article class="bg-white grid-rows-2 shadow-lg px-4 py-8  rounded-lg">
+    <article class="bg-white grid-rows-2 shadow-lg px-4 py-8 rounded-lg border-[1px] border-blue-300" >
         <header class="row-auto p-1 border-b-slate-300 border-b-2 flex items-center">
             <div
                 class="w-14 h-14 rounded-xl uppercase grid place-items-center bg-cyan-500 text-xl font-bold mr-8 text-white">
@@ -38,7 +38,7 @@
                 <div class="rounded-md capitalize tracking-wider text-center w-24 h-7 bg-yellow-200 text-yellow-600 text-sm leading-7"
                     :class="{
                         'bg-yellow-200 text-yellow-600': job.status === 'pending',
-                        'bg-red-200 text-red-600': job.status === 'declined',
+                        'bg-red-300 text-red-600': job.status === 'declined',
                         'bg-blue-200 text-blue-600': job.status === 'interview'
                     }">
                     {{ job.status }}

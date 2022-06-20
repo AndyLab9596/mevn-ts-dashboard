@@ -1,7 +1,7 @@
 <template>
     <section class="w-[90%] mx-auto my-auto py-0">
         <div v-if="globalStore.isLoading"
-            class="rounded-lg w-full bg-cyan-50 pt-12 pb-16 px-8 flex justify-center items-center min-h-[500px]">
+            class="rounded-lg w-full bg-cyan-50 pt-12 pb-16 px-8 flex justify-center items-center">
             <BaseSpinner />
         </div>
         <div v-else>
@@ -9,6 +9,7 @@
             <h4 class="my-4 text-2xl font-semibold">
                 {{ globalStore.totalJobs }} Job{{ globalStore.totalJobs > 1 ? 's' : '' }} Found
             </h4>
+            
             <AllJobContainer />
         </div>
     </section>

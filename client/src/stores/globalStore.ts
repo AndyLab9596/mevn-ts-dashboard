@@ -169,7 +169,6 @@ export const useGlobalStore = defineStore('global', {
             const expiresIn = +expirationDate - new Date().getTime();
             const user = JSON.parse(localStorage.getItem('user') as string);
             const location = localStorage.getItem('location') as string;
-            console.log(expiresIn)
             if (expiresIn < 0) {
                 return;
             }

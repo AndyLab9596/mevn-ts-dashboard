@@ -1,6 +1,6 @@
 <template>
-  <section class="max-w-full overflow-hidden">
-    <main class="flex h-full">
+  <section class="max-w-full overflow-x-hidden relative max-h-screen">
+    <main class="flex">
       <BigSideBar />
       <div class="flex-1 w-full" :class="{'w-[80%]': globalStore.showSideBar}">
         <DashboardNavbar />
