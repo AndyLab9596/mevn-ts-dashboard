@@ -1,5 +1,7 @@
 <template>
-    <button :type="type" class="text-base text-white p-[6px] bg-cyan-500 hover:bg-cyan-700 border-transparent rounded-md capitalize block w-full shadow-lg hover:shadow-2xl transition duration-300 ease-in-out">
+    <button :type="type"
+        class="text-base text-white p-[6px] bg-cyan-500 hover:bg-cyan-700 border-transparent rounded-md capitalize block w-full shadow-lg hover:shadow-2xl transition duration-300 ease-in-out"
+        :class="{ 'bg-red-500 hover:bg-red-700 text-red-200': isDangerouseStyle }">
         <slot></slot>
     </button>
 </template>
@@ -7,7 +9,8 @@
 <script setup lang="ts">
 import { ButtonHTMLAttributes, defineProps } from 'vue';
 interface IBaseButton {
-    type: ButtonHTMLAttributes['type']
+    type: ButtonHTMLAttributes['type'];
+    isDangerouseStyle?: boolean;
 }
 
 defineProps<IBaseButton>();

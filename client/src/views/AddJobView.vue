@@ -16,7 +16,7 @@
                         Submit
                     </BaseButton>
 
-                    <BaseButton type="button" class="w-2/4">
+                    <BaseButton type="button" class="w-2/4" @click="clearInputJob">
                         Clear
                     </BaseButton>
 
@@ -34,11 +34,18 @@ import { computed } from 'vue';
 
 const globalStore = useGlobalStore();
 
-const { jobTypeOptions, statusOptions } = storeToRefs(globalStore);
+const { jobTypeOptions, statusOptions, isEditing } = storeToRefs(globalStore);
 
 const handleSubmit = async () => {
-    // do something
-    await globalStore.setupJob()
+    if (isEditing) {
+        await globalStore.updateJob()
+    } else {
+        await globalStore.setupJob()
+    }
+}
+
+const clearInputJob = () => {
+    globalStore.resetJobInfo();
 }
 
 const positionInput = computed({

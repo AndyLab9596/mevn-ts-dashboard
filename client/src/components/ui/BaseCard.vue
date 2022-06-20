@@ -1,5 +1,5 @@
 <template>
-    <article class="bg-white grid-rows-2 shadow-lg px-4 py-8 rounded-lg border-[1px] border-blue-300" >
+    <article class="bg-white grid-rows-2 shadow-md px-4 py-8 rounded-lg border-[1px] border-blue-300 hover:shadow-xl transition-shadow duration-300">
         <header class="row-auto p-1 border-b-slate-300 border-b-2 flex items-center">
             <div
                 class="w-14 h-14 rounded-xl uppercase grid place-items-center bg-cyan-500 text-xl font-bold mr-8 text-white">
@@ -46,13 +46,14 @@
             </div>
             <footer class="mt-4 px-6">
                 <div>
-                    <RouterLink :to="editLink"
-                        class="bg-green-200 text-green-700 mr-3 cursor-pointer h-7 p-2 rounded-md text-sm font-normal">
+                    <button @click="handleEditJob(job._id)"
+                        class="bg-green-200 text-green-700 mr-3 cursor-pointer px-4 py-2 rounded-md text-sm font-normal">
                         Edit
-                    </RouterLink>
-                    <span class="bg-red-200 text-red-700 cursor-pointer rounded-md p-2 text-sm font-normal">
+                    </button>
+                    <button @click="handleDeleteJob(job._id)"
+                        class="bg-red-200 text-red-700 cursor-pointer rounded-md px-2 py-2 text-sm font-normal">
                         Delete
-                    </span>
+                    </button>
                 </div>
             </footer>
         </div>
@@ -60,16 +61,31 @@
 </template>
 
 <script setup lang="ts">
-import moment from 'moment';
 import { IJobInterfaceData } from '@/models/jobTypes';
-import { ref, defineProps } from 'vue';
+import { useGlobalStore } from '@/stores/globalStore';
+import moment from 'moment';
+import { defineProps, inject } from 'vue';
+import { useRouter } from 'vue-router';
+
 interface IBaseCard {
     job: IJobInterfaceData
 }
 
 defineProps<IBaseCard>();
 
-const editLink = ref('/');
+const router = useRouter();
+const globalStore = useGlobalStore();
+
+const openDialog = inject<(id: string) => void>('dialog');
+
+const handleEditJob = (id: IJobInterfaceData['_id']) => {
+    globalStore.editJob(id);
+    router.push('/add-job')
+};
+
+const handleDeleteJob = async (id: IJobInterfaceData['_id']) => {
+    openDialog && openDialog(id);
+}
 
 </script>
 
