@@ -1,6 +1,6 @@
 import authApi from "@/api/authApi";
 import jobApi from "@/api/jobApi";
-import { IPayloadCreateJob, jobTypeOptions, statusOptions, TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
+import { IJobInterfaceData, IPayloadCreateJob, jobTypeOptions, statusOptions, TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo, IUserInfoSaveLocal } from "@/models/userTypes";
 import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
@@ -29,6 +29,10 @@ interface IGlobalStore {
     jobType: TJobType;
     status: TStatus;
 
+    jobs: IJobInterfaceData[];
+    totalJobs: number;
+    numOfPages: number;
+    page: number;
 }
 
 interface IAlertTextProps {
@@ -67,6 +71,11 @@ export const useGlobalStore = defineStore('global', {
             status: 'pending',
             jobTypeOptions,
             statusOptions,
+
+            jobs: [],
+            totalJobs: 0,
+            numOfPages: 1,
+            page: 1,
         } as IGlobalStore
     },
 
@@ -157,10 +166,9 @@ export const useGlobalStore = defineStore('global', {
             const expirationDate = localStorage.getItem('expirationDate') as string;
             if (typeof expirationDate !== 'string') return;
             const token = localStorage.getItem('token') as string;
-            const expiresIn = +expirationDate - extractExpirationDate(token);
+            const expiresIn = +expirationDate - new Date().getTime();
             const user = JSON.parse(localStorage.getItem('user') as string);
             const location = localStorage.getItem('location') as string;
-
             if (expiresIn < 0) {
                 return;
             }
@@ -233,6 +241,22 @@ export const useGlobalStore = defineStore('global', {
                 }
             } finally {
                 this.resetJobInfo();
+            }
+        },
+
+        async getAllJobs() {
+            try {
+                this.isLoading = true;
+                const { jobs, totalJobs } = await jobApi.getAllJobs();
+                this.jobs = jobs;
+                this.totalJobs = totalJobs
+
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.displayAlert({ alertText: error.message, alertType: 'danger' })
+                }
+            } finally {
+                this.isLoading = false
             }
         }
     },

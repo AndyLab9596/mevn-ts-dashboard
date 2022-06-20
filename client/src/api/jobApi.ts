@@ -1,9 +1,14 @@
-import { IPayloadCreateJob } from "@/models/jobTypes";
+import { IJobInterfaceData, IPayloadCreateJob } from "@/models/jobTypes";
 import axiosClient from "./apiClient";
 
 interface IUpdateJobProps {
     payload: IPayloadCreateJob;
     jobId: string;
+}
+
+interface IAllJobsReturn {
+    jobs: IJobInterfaceData[];
+    totalJobs: number
 }
 
 const jobApi = {
@@ -12,7 +17,7 @@ const jobApi = {
         return axiosClient.post(url, payload)
     },
 
-    getAllJobs(): Promise<IPayloadCreateJob[]> {
+    getAllJobs(): Promise<IAllJobsReturn> {
         const url = '/job';
         return axiosClient.get(url)
     },

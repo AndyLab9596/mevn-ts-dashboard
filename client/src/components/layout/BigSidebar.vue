@@ -1,6 +1,6 @@
 <template>
-    <aside class="sideBar flex-shrink-0 h-full min-h-screen shadow-lg bg-white sticky top-0 transition-all duration-300 ease-in"
-        :class="{ 'w-[250px] opacity-100': globalStore.showSideBar, 'w-0 opacity-0': !globalStore.showSideBar }">
+    <aside class="sideBar flex-shrink-0 max-h-screen h-auto min-h-screen shadow-lg bg-white sticky top-0 transition-all duration-300 ease-in"
+        :class="{ 'w-[20%] opacity-100': globalStore.showSideBar, 'w-0 opacity-0': !globalStore.showSideBar }">
 
         <section>
             <header class="flex justify-center items-center my-6">

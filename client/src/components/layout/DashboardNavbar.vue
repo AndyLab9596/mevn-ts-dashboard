@@ -1,5 +1,5 @@
 <template>
-    <nav class="h-20 flex items-center justify-center bg-white shadow-lg">
+    <nav class="h-20 flex items-center justify-center bg-white shadow-lg sticky top-0">
         <div class="w-[90%] mx-auto flex justify-between items-center">
             <button class="flex justify-center items-center" @click="globalStore.toggleSideBar">
                 <vue-feather type="align-left" stroke-width="2.5" stroke="#06b6d4" size="28"></vue-feather>
