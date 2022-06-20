@@ -216,6 +216,8 @@ export const useGlobalStore = defineStore('global', {
             this.jobLocation = '';
             this.status = 'pending';
             this.jobType = 'full-time';
+            this.editJobId = '';
+            this.isEditing = false;
         },
 
         async setupJob(jobId = "") {
@@ -257,6 +259,41 @@ export const useGlobalStore = defineStore('global', {
                 }
             } finally {
                 this.isLoading = false
+            }
+        },
+
+        editJob(id: IJobInterfaceData['_id']) {
+            this.isEditing = true;
+            this.editJobId = id;
+            const editedJob = this.jobs.find((job: IJobInterfaceData) => job._id === id);
+
+            if (editedJob) {
+                this.position = editedJob.position;
+                this.company = editedJob.company;
+                this.jobLocation = editedJob.jobLocation;
+                this.status = editedJob.status;
+                this.jobType = editedJob.jobType;
+            } else {
+                this.displayAlert({ alertText: 'No job was found', alertType: 'danger' })
+            }
+        },
+
+        async updateJob() {
+            try {
+                const payload: IPayloadCreateJob = {
+                    position: this.position,
+                    company: this.company,
+                    jobLocation: this.jobLocation,
+                    status: this.status,
+                    jobType: this.jobType,
+                };
+                await jobApi.updateJob({ payload, jobId: this.editJobId })
+                this.displayAlert({ alertText: 'Update Job Success', alertType: 'success' });
+                this.resetJobInfo();
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.displayAlert({ alertText: error.message, alertType: 'danger' })
+                }
             }
         }
     },
