@@ -15,6 +15,11 @@ interface IPayloadCreateJob {
     jobLocation: string;
 }
 
+interface IJobInterfaceData extends IPayloadCreateJob{
+    createdAt: Date;
+    _id: string;
+}
+
 export {
     jobTypeOptions,
     statusOptions,
@@ -22,5 +27,6 @@ export {
     TStatusOptions,
     TJobType,
     TStatus,
-    IPayloadCreateJob
+    IPayloadCreateJob,
+    IJobInterfaceData
 }

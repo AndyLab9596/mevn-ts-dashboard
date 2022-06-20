@@ -1,4 +1,4 @@
-import { IPayloadCreateJob } from "@/models/jobTypes";
+import { IJobInterfaceData, IPayloadCreateJob } from "@/models/jobTypes";
 import axiosClient from "./apiClient";
 
 interface IUpdateJobProps {
@@ -7,7 +7,7 @@ interface IUpdateJobProps {
 }
 
 interface IAllJobsReturn {
-    jobs: IPayloadCreateJob[];
+    jobs: IJobInterfaceData[];
     totalJobs: number
 }
 
