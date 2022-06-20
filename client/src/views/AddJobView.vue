@@ -37,7 +37,7 @@ const globalStore = useGlobalStore();
 const { jobTypeOptions, statusOptions, isEditing } = storeToRefs(globalStore);
 
 const handleSubmit = async () => {
-    if (isEditing) {
+    if (isEditing.value) {
         await globalStore.updateJob()
     } else {
         await globalStore.setupJob()
