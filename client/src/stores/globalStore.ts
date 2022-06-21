@@ -1,6 +1,6 @@
 import authApi from "@/api/authApi";
 import jobApi from "@/api/jobApi";
-import { IJobInterfaceData, IPayloadCreateJob, jobTypeOptions, statusOptions, TJobType, TJobTypeOptions, TStatus, TStatusOptions } from "@/models/jobTypes";
+import { IJobInterfaceData, IPayloadCreateJob, IPayloadSearchJob, jobTypeOptions, sortOptions, statusOptions, TJobType, TJobTypeOptions, TSearchJobType, TSearchStatus, TSort, TSortOptions, TStatus, TStatusOptions, searchStatusOptions, searchJobTypeOptions, TSearchStatusOptions, TSearchJobTypeOptions } from "@/models/jobTypes";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo, IUserInfoSaveLocal } from "@/models/userTypes";
 import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
@@ -33,6 +33,15 @@ interface IGlobalStore {
     totalJobs: number;
     numOfPages: number;
     page: number;
+
+    // search
+    search: string;
+    searchStatus: TSearchStatus;
+    searchType: TSearchJobType;
+    sort: TSort;
+    sortOptions: TSortOptions;
+    searchJobTypeOptions: TSearchJobTypeOptions;
+    searchStatusOptions: TSearchStatusOptions;
 }
 
 interface IAlertTextProps {
@@ -76,6 +85,15 @@ export const useGlobalStore = defineStore('global', {
             totalJobs: 0,
             numOfPages: 1,
             page: 1,
+
+            search: '',
+            searchStatus: 'all',
+            searchType: 'all',
+            sort: 'latest',
+            sortOptions,
+            searchStatusOptions,
+            searchJobTypeOptions,
+
         } as IGlobalStore
     },
 
@@ -249,9 +267,16 @@ export const useGlobalStore = defineStore('global', {
         async getAllJobs() {
             try {
                 this.isLoading = true;
-                const { jobs, totalJobs } = await jobApi.getAllJobs();
+                const { jobs, totalJobs, numOfPages } = await jobApi.getAllJobs({
+                    page: this.page,
+                    search: this.search,
+                    searchStatus: this.searchStatus,
+                    searchType: this.searchType,
+                    sort: this.sort
+                });
                 this.jobs = jobs;
-                this.totalJobs = totalJobs
+                this.totalJobs = totalJobs;
+                this.numOfPages = numOfPages;
 
             } catch (error) {
                 if (error instanceof Error) {
@@ -307,6 +332,17 @@ export const useGlobalStore = defineStore('global', {
                     this.displayAlert({ alertText: error.message, alertType: 'danger' })
                 }
             }
+        },
+
+        changeJobSearch<T extends keyof IPayloadSearchJob>(key: T, value: IGlobalStore[T]) {
+            this.$state[key] = value;
+        },
+
+        clearSearchForm() {
+            this.search = '';
+            this.searchStatus = 'all';
+            this.searchType = 'all';
+            this.sort = 'latest';
         }
     },
 

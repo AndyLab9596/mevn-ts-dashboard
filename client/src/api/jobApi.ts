@@ -1,4 +1,4 @@
-import { IJobInterfaceData, IPayloadCreateJob } from "@/models/jobTypes";
+import { IJobInterfaceData, IPayloadCreateJob, TSearchJobType, TSearchStatus, TSort } from "@/models/jobTypes";
 import axiosClient from "./apiClient";
 
 interface IUpdateJobProps {
@@ -8,7 +8,16 @@ interface IUpdateJobProps {
 
 interface IAllJobsReturn {
     jobs: IJobInterfaceData[];
-    totalJobs: number
+    totalJobs: number;
+    numOfPages: number;
+}
+
+interface GetJobQueryObject {
+    page: number;
+    searchStatus: TSearchStatus;
+    searchType: TSearchJobType;
+    search: string;
+    sort: TSort;
 }
 
 const jobApi = {
@@ -17,8 +26,12 @@ const jobApi = {
         return axiosClient.post(url, payload)
     },
 
-    getAllJobs(): Promise<IAllJobsReturn> {
-        const url = '/job';
+    getAllJobs({ page, search, searchStatus, searchType }: GetJobQueryObject): Promise<IAllJobsReturn> {
+        let url = `/job?page=${page}&status=${searchStatus}&jobType=${searchType}`;
+
+        if (search) {
+            url = url + `&search=${search}`
+        }
         return axiosClient.get(url)
     },
 
