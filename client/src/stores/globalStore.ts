@@ -343,6 +343,20 @@ export const useGlobalStore = defineStore('global', {
             this.searchStatus = 'all';
             this.searchType = 'all';
             this.sort = 'latest';
+        },
+
+        nextPage() {
+            if (this.page === this.numOfPages) return;
+            this.page += 1;
+        },
+
+        previousPage() {
+            if (this.page === 1) return;
+            this.page -= 1;
+        },
+
+        handleChangePage(page: number) {
+            this.page = page
         }
     },
 

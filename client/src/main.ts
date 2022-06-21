@@ -10,6 +10,7 @@ import BaseAlert from '@/components/ui/BaseAlert.vue';
 import BaseSpinner from '@/components/ui/BaseSpinner.vue';
 import BaseDialog from '@/components/ui/BaseDialog.vue';
 import DashboardContent from '@/components/layout/DashboardContent.vue';
+import BasePagination from '@/components/ui/BasePagination.vue';
 import { createPinia } from 'pinia';
 import VueFeather from 'vue-feather';
 
@@ -24,6 +25,7 @@ app.component('BaseSpinner', BaseSpinner);
 app.component('DashboardContent', DashboardContent);
 app.component('BaseSelectFormField', BaseSelectFormField);
 app.component('BaseDialog', BaseDialog);
+app.component('BasePagination', BasePagination);
 app.component(VueFeather.name, VueFeather);
 
 app.mount('#app');

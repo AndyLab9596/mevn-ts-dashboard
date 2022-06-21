@@ -8,6 +8,9 @@
             <h3>No job to display</h3>
         </div>
         <BaseCard v-else v-for="job in jobs" :key="job._id" :job="job" />
+        <div class="mt-8 flex justify-end items-center col-span-2">
+            <BasePagination />
+        </div>
     </section>
 </template>
 
@@ -15,6 +18,7 @@
 import BaseCard from '@/components/ui/BaseCard.vue';
 import { useGlobalStore } from '@/stores/globalStore';
 import { storeToRefs } from 'pinia';
+import BasePagination from '../ui/BasePagination.vue';
 
 const globalStore = useGlobalStore();
 const { jobs, totalJobs } = storeToRefs(globalStore);
