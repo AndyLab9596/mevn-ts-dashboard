@@ -5,6 +5,18 @@ const extractExpirationDate = (token: string) => {
     return exp
 }
 
+const debounce = (fn: void, delay: number) => {
+    let id: number | undefined;
+
+    return () => {
+        if (id) clearTimeout(id);
+        id = setTimeout(() => {
+            fn
+        }, delay)
+    }
+}
+
 export {
-    extractExpirationDate
+    extractExpirationDate,
+    debounce
 }

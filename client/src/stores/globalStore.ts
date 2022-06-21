@@ -267,9 +267,16 @@ export const useGlobalStore = defineStore('global', {
         async getAllJobs() {
             try {
                 this.isLoading = true;
-                const { jobs, totalJobs } = await jobApi.getAllJobs();
+                const { jobs, totalJobs, numOfPages } = await jobApi.getAllJobs({
+                    page: this.page,
+                    search: this.search,
+                    searchStatus: this.searchStatus,
+                    searchType: this.searchType,
+                    sort: this.sort
+                });
                 this.jobs = jobs;
-                this.totalJobs = totalJobs
+                this.totalJobs = totalJobs;
+                this.numOfPages = numOfPages;
 
             } catch (error) {
                 if (error instanceof Error) {
