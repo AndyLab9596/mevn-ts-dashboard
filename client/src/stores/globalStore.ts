@@ -1,6 +1,6 @@
 import authApi from "@/api/authApi";
 import jobApi from "@/api/jobApi";
-import { IJobInterfaceData, IPayloadCreateJob, IPayloadSearchJob, jobTypeOptions, sortOptions, statusOptions, TJobType, TJobTypeOptions, TSearchJobType, TSearchStatus, TSort, TSortOptions, TStatus, TStatusOptions, searchStatusOptions, searchJobTypeOptions, TSearchStatusOptions, TSearchJobTypeOptions } from "@/models/jobTypes";
+import { IJobInterfaceData, IPayloadCreateJob, IPayloadSearchJob, jobTypeOptions, sortOptions, statusOptions, TJobType, TJobTypeOptions, TSearchJobType, TSearchStatus, TSort, TSortOptions, TStatus, TStatusOptions, searchStatusOptions, searchJobTypeOptions, TSearchStatusOptions, TSearchJobTypeOptions, IDefaultStats, IMonthlyApp } from "@/models/jobTypes";
 import { ILoginUserPayload, IRegisterUserPayload, IUpdateUser, IUserInfo, IUserInfoSaveLocal } from "@/models/userTypes";
 import { extractExpirationDate } from "@/utils/helper";
 import { defineStore } from "pinia";
@@ -42,6 +42,13 @@ interface IGlobalStore {
     sortOptions: TSortOptions;
     searchJobTypeOptions: TSearchJobTypeOptions;
     searchStatusOptions: TSearchStatusOptions;
+
+    // stats
+    statPending: number;
+    statInterview: number;
+    statDeclined: number;
+
+    monthlyApplications: IMonthlyApp[];
 }
 
 interface IAlertTextProps {
@@ -93,6 +100,12 @@ export const useGlobalStore = defineStore('global', {
             sortOptions,
             searchStatusOptions,
             searchJobTypeOptions,
+
+            statPending: 0,
+            statInterview: 0,
+            statDeclined: 0,
+
+            monthlyApplications: []
 
         } as IGlobalStore
     },
@@ -357,6 +370,20 @@ export const useGlobalStore = defineStore('global', {
 
         handleChangePage(page: number) {
             this.page = page
+        },
+
+        async getStatsInfo() {
+            try {
+                const response = await jobApi.getJobStats();
+                this.statPending = response.defaultStats.pending;
+                this.statDeclined = response.defaultStats.declined;
+                this.statInterview = response.defaultStats.interview;
+                this.monthlyApplications = response.monthlyApplications;
+            } catch (error) {
+                if (error instanceof Error) {
+                    this.displayAlert({ alertText: error.message, alertType: 'danger' })
+                }
+            }
         }
     },
 
