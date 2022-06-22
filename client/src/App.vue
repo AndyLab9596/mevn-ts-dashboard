@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 min-w-[900px]">
+  <div class="bg-gray-100 min-w-[400px]">
     <RouterView />
   </div>
 </template>
