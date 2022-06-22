@@ -44,7 +44,10 @@ interface IGlobalStore {
     searchStatusOptions: TSearchStatusOptions;
 
     // stats
-    stats: IDefaultStats | null;
+    statPending: number;
+    statInterview: number;
+    statDeclined: number;
+
     monthlyApplications: IMonthlyApp[];
 }
 
@@ -98,7 +101,10 @@ export const useGlobalStore = defineStore('global', {
             searchStatusOptions,
             searchJobTypeOptions,
 
-            stats: null,
+            statPending: 0,
+            statInterview: 0,
+            statDeclined: 0,
+
             monthlyApplications: []
 
         } as IGlobalStore
@@ -369,8 +375,10 @@ export const useGlobalStore = defineStore('global', {
         async getStatsInfo() {
             try {
                 const response = await jobApi.getJobStats();
-                console.log(response);
-
+                this.statPending = response.defaultStats.pending;
+                this.statDeclined = response.defaultStats.declined;
+                this.statInterview = response.defaultStats.interview;
+                this.monthlyApplications = response.monthlyApplications;
             } catch (error) {
                 if (error instanceof Error) {
                     this.displayAlert({ alertText: error.message, alertType: 'danger' })

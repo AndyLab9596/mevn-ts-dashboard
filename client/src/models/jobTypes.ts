@@ -45,7 +45,7 @@ interface IMonthlyApp {
 }
 
 interface IStats {
-    stats: IDefaultStats;
+    defaultStats: IDefaultStats;
     monthlyApplications: IMonthlyApp[]
 }
 

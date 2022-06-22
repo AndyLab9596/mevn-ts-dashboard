@@ -5,7 +5,7 @@
             <article class="p-8 bg-white rounded-lg border-b-4 border-solid border-yellow-500">
                 <header class="flex items-center justify-between">
                     <span class="font-bold text-5xl text-yellow-500 ">
-                        1
+                        {{ statPending }}
                     </span>
                     <span class="w-[70px] h-[60px] bg-yellow-100 flex items-center justify-center rounded-md">
                         <vue-feather size="32" type="briefcase" stroke="#f59e0b"></vue-feather>
@@ -19,7 +19,7 @@
             <article class="p-8 bg-white rounded-lg border-b-4 border-solid border-blue-500">
                 <header class="flex items-center justify-between">
                     <span class="font-bold text-5xl text-blue-500 ">
-                        1
+                        {{ statInterview }}
                     </span>
                     <span class="w-[70px] h-[60px] bg-blue-100 flex items-center justify-center rounded-md">
                         <vue-feather size="32" type="check-square" stroke="#3b82f6"></vue-feather>
@@ -33,7 +33,7 @@
             <article class="p-8 bg-white rounded-lg border-b-4 border-solid border-rose-500">
                 <header class="flex items-center justify-between">
                     <span class="font-bold text-5xl text-rose-500 ">
-                        1
+                        {{ statDeclined }}
                     </span>
                     <span class="w-[70px] h-[60px] bg-rose-100 flex items-center justify-center rounded-md">
                         <vue-feather size="32" type="x" stroke="#f43f5e"></vue-feather>
@@ -56,10 +56,7 @@ import { onMounted } from 'vue';
 
 
 const globalStore = useGlobalStore();
-const { isLoading, stats, monthlyApplications } = storeToRefs(globalStore);
-
-console.log('stats', stats.value);
-console.log('monthlyApplications', monthlyApplications.value);
+const { isLoading, statPending, statDeclined, statInterview } = storeToRefs(globalStore);
 
 
 onMounted(() => {
