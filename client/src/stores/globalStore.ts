@@ -379,6 +379,7 @@ export const useGlobalStore = defineStore('global', {
                 this.statDeclined = response.defaultStats.declined;
                 this.statInterview = response.defaultStats.interview;
                 this.monthlyApplications = response.monthlyApplications;
+
             } catch (error) {
                 if (error instanceof Error) {
                     this.displayAlert({ alertText: error.message, alertType: 'danger' })
