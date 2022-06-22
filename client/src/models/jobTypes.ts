@@ -38,6 +38,17 @@ interface IJobInterfaceData extends IPayloadCreateJob {
     _id: string;
 }
 
+type IDefaultStats = { [K in typeof statusOptions[number]]: number }
+interface IMonthlyApp {
+    date: string,
+    count: number,
+}
+
+interface IStats {
+    stats: IDefaultStats;
+    monthlyApplications: IMonthlyApp[]
+}
+
 export {
     jobTypeOptions,
     statusOptions,
@@ -56,5 +67,9 @@ export {
     searchStatusOptions,
     TSearchStatusOptions,
     TSearchStatus,
-    IPayloadSearchJob
+    IPayloadSearchJob,
+    IStats,
+    IMonthlyApp,
+    IDefaultStats
+
 }

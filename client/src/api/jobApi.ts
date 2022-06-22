@@ -1,4 +1,4 @@
-import { IJobInterfaceData, IPayloadCreateJob, TSearchJobType, TSearchStatus, TSort } from "@/models/jobTypes";
+import { IJobInterfaceData, IPayloadCreateJob, IStats, TSearchJobType, TSearchStatus, TSort } from "@/models/jobTypes";
 import axiosClient from "./apiClient";
 
 interface IUpdateJobProps {
@@ -45,7 +45,7 @@ const jobApi = {
         return axiosClient.delete(url);
     },
 
-    getJobStats() {
+    getJobStats(): Promise<IStats> {
         const url = '/job/stats';
         return axiosClient.get(url);
     }

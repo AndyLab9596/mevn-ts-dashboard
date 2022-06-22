@@ -1,8 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import mongoose from 'mongoose';
 import { BadRequestError, NotFoundError } from '../errors';
 import Job from '../models/Job';
 import checkPermission from '../utils/checkPermission';
+import moment from 'moment'
 
 
 const createJob = async (req: Request, res: Response) => {
@@ -104,7 +106,49 @@ const deleteJob = async (req: Request, res: Response) => {
 };
 
 const showStats = async (req: Request, res: Response) => {
-    res.send('job stats');
+    let stats = await Job.aggregate([
+        { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
+        { $group: { _id: '$status', count: { $sum: 1 } } }
+    ])
+
+    const processStats = stats.reduce<Record<string, string>>((acc, curr) => {
+        const { _id: title, count } = curr;
+        acc[title] = count;
+        return acc;
+    }, {});
+
+    const defaultStats = {
+        pending: processStats.pending || 0,
+        interview: processStats.interview || 0,
+        declined: processStats.declined || 0,
+    }
+
+    let monthlyApplications = await Job.aggregate([
+        { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
+        {
+            $group: {
+                _id: { year: { $year: '$createdAt' }, month: { $month: '$createdAt' } },
+                count: { $sum: 1 },
+            },
+        },
+        { $sort: { '_id.year': -1, '_id.month': -1 } },
+        { $limit: 6 },
+    ])
+    monthlyApplications = monthlyApplications
+        .map((item) => {
+            const {
+                _id: { year, month },
+                count,
+            } = item
+            const date = moment()
+                .month(month - 1)
+                .year(year)
+                .format('MMM Y')
+            return { date, count }
+        })
+        .reverse()
+
+    res.status(StatusCodes.OK).json({ defaultStats, monthlyApplications });
 };
 
 export {

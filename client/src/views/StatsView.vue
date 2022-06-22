@@ -52,9 +52,18 @@
 <script setup lang="ts">
 import { useGlobalStore } from '@/stores/globalStore';
 import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 
 
 const globalStore = useGlobalStore();
-const { isLoading } = storeToRefs(globalStore);
+const { isLoading, stats, monthlyApplications } = storeToRefs(globalStore);
+
+console.log('stats', stats.value);
+console.log('monthlyApplications', monthlyApplications.value);
+
+
+onMounted(() => {
+    globalStore.getStatsInfo()
+})
 
 </script>
