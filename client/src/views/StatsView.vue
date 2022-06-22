@@ -46,6 +46,11 @@
 
         </section>
 
+        <section class="mt-16 p-14 ">
+            <h4 class="text-center mb-3">Monthly Applications</h4>
+            <ChartContainer :chartLabelAr="chartLabel" :chartDataAr="chartData" />
+        </section>
+
     </DashboardContent>
 </template>
 
@@ -53,10 +58,14 @@
 import { useGlobalStore } from '@/stores/globalStore';
 import { storeToRefs } from 'pinia';
 import { onMounted } from 'vue';
+import ChartContainer from '@/components/layout/ChartContainer.vue';
 
 
 const globalStore = useGlobalStore();
-const { isLoading, statPending, statDeclined, statInterview } = storeToRefs(globalStore);
+const { isLoading, statPending, statDeclined, statInterview, monthlyApplications } = storeToRefs(globalStore);
+
+const chartLabel = monthlyApplications.value.map((item) => item.date);
+const chartData = monthlyApplications.value.map((item) => item.count);
 
 
 onMounted(() => {
